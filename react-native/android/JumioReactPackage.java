@@ -1,4 +1,4 @@
-package com.facebook.react.modules.toast;
+package <YOUR_PACKAGE_NAME>;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
