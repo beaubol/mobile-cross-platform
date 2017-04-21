@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-jumio-mobilesdk" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>JumioMobileSDK</name>
+    <js-module name="JumioMobileSDK" src="www/JumioMobileSDK.js">
+        <clobbers target="Jumio" />
+    </js-module>
+
+    <dependency id="cordova-plugin-cocoapod-support" />
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="JumioMobileSDK">
+                <param name="ios-package" value="JumioMobileSDK" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/JumioMobileSDK.h" />
+        <source-file src="src/ios/JumioMobileSDK.m" />
+        
+        <preference name="CAMERA_USAGE_DESCRIPTION" default="Jumio-MobileSDK needs to access the camera to scan documents."/>
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>$CAMERA_USAGE_DESCRIPTION</string>
+        </config-file>
+        
+        <pods-config ios-min-version="8.0" use-frameworks="true">
+            <source url="https://github.com/CocoaPods/Specs.git" />
+            <source url="http://mobile-sdk.jumio.com/distribution.git" />
+        </pods-config>
+        <pod name="JumioMobileSDK-FAT" version="2.5.0" configurations="release,debug" />
+    </platform>
+</plugin>
