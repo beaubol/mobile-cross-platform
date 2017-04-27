@@ -82,6 +82,7 @@ Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 DATACENTER can either be **us** or **eu**.
 
 
+
 Configure the SDK with the *options*-Object.
 
 | Option | Datatype | Description |
@@ -104,6 +105,7 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 Jumio.startBAM(successCallback, errorCallback);
 ```
 
+
 ### Netverify / Fastfill
 
 To initialize the SDK, perform the following call.
@@ -113,6 +115,7 @@ Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
 DATACENTER can either be **us** or **eu**.
+
 
 
 Configure the SDK with the *options*-Object.
@@ -137,6 +140,7 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 Jumio.startNetverify(successCallback, errorCallback);
 ```
 
+
 ### Document Verification
 
 To initialize the SDK, perform the following call.
@@ -146,6 +150,7 @@ Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options
 ```
 
 DATACENTER can either be **us** or **eu**.
+
 
 
 Configure the SDK with the *options*-Object. (options marked with * are mandatory)
@@ -168,6 +173,7 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 ```
 Jumio.startDocumentVerification(successCallback, errorCallback);
 ```
+
 
 ## Callback
 
