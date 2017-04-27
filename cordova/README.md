@@ -3,7 +3,7 @@
 Official Jumio Mobile-SDK plugin for Apache Cordova
 
 ## Requirements
-* Jumio Mobile SDK Android 2.6.0+, iOS 2..5.0+
+* Jumio Mobile SDK Android 2.6.0+, iOS 2.5.0+
 
 ## Setup
 
@@ -73,11 +73,13 @@ dependencies {
 
 ### BAM Checkout
 
+To Initialize the SDK, perform the following call.
+
 ```
 Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
-DATACENTER can either be *us* or *eu*.
+DATACENTER can either be **us** or **eu**.
 
 
 Configure the SDK with the *options*-Object.
@@ -96,8 +98,8 @@ Configure the SDK with the *options*-Object.
 | cardNumberMaskingEnabled | Boolean |
 | adyenPublicKey | String |
 
+As soon as the sdk is initialized, the sdk is started by the following call.
 
-
-
-
-
+```
+Jumio.startBAM(successCallback, errorCallback);
+```
