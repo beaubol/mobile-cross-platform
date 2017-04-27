@@ -136,3 +136,35 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 ```
 Jumio.startNetverify(successCallback, errorCallback);
 ```
+
+### Document Verification
+
+To initialize the SDK, perform the following call.
+
+```
+Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
+```
+
+DATACENTER can either be **us** or **eu**.
+
+
+Configure the SDK with the *options*-Object. (options marked with * are mandatory)
+
+| Option | Datatype | Description |
+| ------ | -------- | ----------- |
+| type* | String | See the list below |
+| customDocumentCode* | String | Set your custom document code (set in the merchatn backend under "Settings" - "Multi Documents" - "Custom" |
+| country | String | Set the country (ISO-3166-1 alpha-3 code) |
+| merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
+| callbackUrl | String | Specify an URL for individual transactions |
+| additionalInformation | String | Add additional paramter (max. 255 characters) |
+| merchantScanReference | String | Allows you to identify the scan (max. 100 characters) |
+| customerId | String | Set a customer identifier (max. 100 characters) |
+| showHelpBeforeScan | Boolean | Show/Hide the help screen before scanning |
+| documentName | String | Override the document label on the help screen |
+
+As soon as the sdk is initialized, the sdk is started by the following call.
+
+```
+Jumio.startDocumentVerification(successCallback, errorCallback);
+```
