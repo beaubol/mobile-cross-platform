@@ -22,7 +22,6 @@ package com.jumio.mobilesdk;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
 import org.json.JSONArray;
@@ -32,14 +31,13 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 
 import com.jumio.MobileSDK;
 import com.jumio.bam.*;
 import com.jumio.bam.custom.*;
+import com.jumio.commons.json.JSON;
 import com.jumio.core.enums.*;
 import com.jumio.core.exceptions.*;
 import com.jumio.md.MultiDocumentSDK;
@@ -58,11 +56,14 @@ public class JumioMobileSDK extends CordovaPlugin {
     private static final String ACTION_BAM_START = "startBAM";
     private static final String ACTION_NV_INIT = "initNetverify";
     private static final String ACTION_NV_START = "startNetverify";
+    private static final String ACTION_DV_INIT = "initDocumentVerification";
+    private static final String ACTION_DV_START = "startDocumentVerification";
     
     private BamSDK bamSDK;
     private NetverifySDK netverifySDK;
-    private MultiDocumentSDK multiDocumentSDK;
+    private MultiDocumentSDK documentVerificationSDK;
     private CallbackContext callbackContext;
+    private String errorMsg;
     
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -89,6 +90,16 @@ public class JumioMobileSDK extends CordovaPlugin {
             result = new PluginResult(Status.NO_RESULT);
             result.setKeepCallback(true);
             return true;
+        } else if (action.equals(ACTION_DV_INIT)) {
+            initDocumentVerification(args);
+            result = new PluginResult(Status.NO_RESULT);
+            result.setKeepCallback(false);
+            return true;
+        } else if (action.equals(ACTION_DV_START)) {
+            startDocumentVerification(args);
+            result = new PluginResult(Status.NO_RESULT);
+            result.setKeepCallback(true);
+            return true;
         } else {
             result = new PluginResult(Status.INVALID_ACTION);
             callbackContext.error("Invalid Action");
@@ -100,18 +111,18 @@ public class JumioMobileSDK extends CordovaPlugin {
     
     private void initBAM(JSONArray data) {
         if (BamSDK.isRooted()) {
-            Log.e(TAG, "BAM SDK can't run on a rooted device.");
+            showErrorMessage("The BAM SDK can't run on a rooted device.");
             return;
         }
         
         if (!BamSDK.isSupportedPlatform()) {
-            Log.e(TAG, "Platform not supported.");
+            showErrorMessage("This platform is not supported.");
             return;
         }
         
         try {
             if (data.isNull(0) || data.isNull(1) || data.isNull(2)) {
-                Log.e(TAG, "Missing required parameters apiToken, apiSecret or dataCenter.");
+                showErrorMessage("Missing required parameters apiToken, apiSecret or dataCenter.");
                 return;
             }
             
@@ -128,26 +139,47 @@ public class JumioMobileSDK extends CordovaPlugin {
                 while (keys.hasNext()) {
                     String key = keys.next();
                     
-                    // ...
+                    if (key.equals("cardHolderNameRequired")) {
+                        bamSDK.setCardHolderNameRequired(options.getBoolean(key));
+                    } else if (key.equals("sortCodeAndAccountNumberRequired")) {
+                        bamSDK.setSortCodeAndAccountNumberRequired(options.getBoolean(key));
+                    } else if (key.equals("expiryRequired")) {
+                        bamSDK.setExpiryRequired(options.getBoolean(key));
+                    } else if (key.equals("cvvRequired")) {
+                        bamSDK.setCvvRequired(options.getBoolean(key));
+                    } else if (key.equals("expiryEditable")) {
+                        bamSDK.setExpiryEditable(options.getBoolean(key));
+                    } else if (key.equals("cardHolderNameEditable")) {
+                        bamSDK.setCardHolderNameEditable(options.getBoolean(key));
+                    } else if (key.equals("merchantReportingCriteria")) {
+                        bamSDK.setMerchantReportingCriteria(options.getString(key));
+                    } else if (key.equals("vibrationEffectEnabled")) {
+                        bamSDK.setVibrationEffectEnabled(options.getBoolean(key));
+                    } else if (key.equals("enableFlashOnScanStart")) {
+                        bamSDK.setEnableFlashOnScanStart(options.getBoolean(key));
+                    } else if (key.equals("cardNumberMaskingEnabled")) {
+                        bamSDK.setCardNumberMaskingEnabled(options.getBoolean(key));
+                    } else if (key.equals("adyenPublicKey")) {
+                        bamSDK.setAdyenPublicKey(options.getString(key));
+                    } else if (key.equals("cameraPosition")) {
+                        // TODO: Camera position
+                        //bamSDK.setCameraPosition();
+                    } else if (key.equals("cardTypes")) {
+                        // TODO: Card types
+                        //bamSDK.setSupportedCreditCardTypes();
+                    }
                 }
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Invalid parameters.");
+            showErrorMessage("Invalid parameters: " + e.getLocalizedMessage());
         } catch (PlatformNotSupportedException e) {
-            Log.e(TAG, "Error initializing the BAM SDK. Try again.");
+            showErrorMessage("Error initializing the BAM SDK: " + e.getLocalizedMessage());
         }
     }
     
     private void startBAM(JSONArray data) {
         if (bamSDK == null) {
-            try {
-                JSONObject res = new JSONObject();
-                res.put("code", 0);
-                res.put("message", "Not initialized. Call initBAM() first.");
-                callbackContext.error(res);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            showErrorMessage("The BAM SDK is not initialized yet. Call initBAM() first.");
             return;
         }
         
@@ -157,7 +189,7 @@ public class JumioMobileSDK extends CordovaPlugin {
                 try {
                     checkPermissionsAndStart(bamSDK);
                 } catch (Exception e) {
-                    Log.e(TAG, "Error starting the BAM SDK. Try again.");
+                    showErrorMessage("Error starting the BAM SDK: " + e.getLocalizedMessage());
                 }
             }
         };
@@ -170,13 +202,13 @@ public class JumioMobileSDK extends CordovaPlugin {
     
     private void initNetverify(JSONArray data) {
         if (!NetverifySDK.isSupportedPlatform()) {
-            Log.e(TAG, "Platform not supported.");
+            showErrorMessage("This platform is not supported.");
             return;
         }
         
         try {
             if (data.isNull(0) || data.isNull(1) || data.isNull(2)) {
-                Log.e(TAG, "Missing required parameters apiToken, apiSecret or dataCenter.");
+                showErrorMessage("Missing required parameters apiToken, apiSecret or dataCenter.");
                 return;
             }
             
@@ -194,29 +226,49 @@ public class JumioMobileSDK extends CordovaPlugin {
                     String key = keys.next();
                     
                     if (key.equals("requireVerification")) {
-                        Boolean value = options.getBoolean(key);
-                        netverifySDK.setRequireVerification(value);
+                        netverifySDK.setRequireVerification(options.getBoolean(key));
+                    } else if (key.equals("callbackUrl")) {
+                        netverifySDK.setCallbackUrl(options.getString(key));
+                    } else if (key.equals("requireFaceMatch")) {
+                        netverifySDK.setRequireFaceMatch(options.getBoolean(key));
+                    } else if (key.equals("preselectedCountry")) {
+                        netverifySDK.setPreselectedCountry(options.getString(key));
+                    } else if (key.equals("merchantScanReference")) {
+                        netverifySDK.setMerchantScanReference(options.getString(key));
+                    } else if (key.equals("merchantReportingCriteria")) {
+                        netverifySDK.setMerchantReportingCriteria(options.getString(key));
+                    } else if (key.equals("customerId")) {
+                        netverifySDK.setCustomerId(options.getString(key));
+                    } else if (key.equals("additionalInformation")) {
+                        netverifySDK.setAdditionalInformation(options.getString(key));
+                    } else if (key.equals("enableEpassport")) {
+                        netverifySDK.setEnableEpassport(options.getBoolean(key));
+                    } else if (key.equals("sendDebugInfoToJumio")) {
+                        netverifySDK.sendDebugInfoToJumio(options.getBoolean(key));
+                    } else if (key.equals("dataExtractionOnMobileOnly")) {
+                        netverifySDK.setDataExtractionOnMobileOnly(options.getBoolean(key));
+                    } else if (key.equals("showHelpBeforeScan")) {
+                        netverifySDK.setShowHelpBeforeScan(options.getBoolean(key));
+                    } else if (key.equals("cameraPosition")) {
+                        // TODO: Camera position
+                        //netverifySDK.setCameraPosition();
+                    } else if (key.equals("preselectedDocumentVariant")) {
+                        // TODO: Document Variant
+                    } else if (key.equals("documentTypes")) {
+                        // TODO: Document Types
                     }
-                    // ...
                 }
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Invalid parameters.");
+            showErrorMessage("Invalid parameters: " + e.getLocalizedMessage());
         } catch (PlatformNotSupportedException e) {
-            Log.e(TAG, "Error initializing the Netverify SDK. Try again.");
+            showErrorMessage("Error initializing the Netverify SDK: " + e.getLocalizedMessage());
         }
     }
     
     private void startNetverify(JSONArray data) {
         if (netverifySDK == null) {
-            try {
-                JSONObject res = new JSONObject();
-                res.put("code", 0);
-                res.put("message", "Not initialized. Call initNetverify() first.");
-                callbackContext.error(res);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            showErrorMessage("The Netverify SDK is not initialized yet. Call initNetverify() first.");
             return;
         }
         
@@ -226,7 +278,7 @@ public class JumioMobileSDK extends CordovaPlugin {
                 try {
                     checkPermissionsAndStart(netverifySDK);
                 } catch (Exception e) {
-                    Log.e(TAG, "Error starting the Netverify SDK. Try again.");
+                    showErrorMessage("Error starting the Netverify SDK: " + e.getLocalizedMessage());
                 }
             }
         };
@@ -234,6 +286,99 @@ public class JumioMobileSDK extends CordovaPlugin {
         this.cordova.setActivityResultCallback(this);
         this.cordova.getActivity().runOnUiThread(runnable);
     }
+    
+    // DOCUMENT VERIFICATION
+    
+    private void initDocumentVerification(JSONArray data) {
+        if (!MultiDocumentSDK.isSupportedPlatform()) {
+            showErrorMessage("This platform is not supported.");
+            return;
+        }
+        
+        try {
+            if (data.isNull(0) || data.isNull(1) || data.isNull(2)) {
+                showErrorMessage("Missing required parameters apiToken, apiSecret or dataCenter.");
+                return;
+            }
+            
+            String apiToken = data.getString(0);
+            String apiSecret = data.getString(1);
+            JumioDataCenter dataCenter = (data.getString(2).toLowerCase().equals("us")) ? JumioDataCenter.US : JumioDataCenter.EU;
+            
+            documentVerificationSDK = MultiDocumentSDK.create(cordova.getActivity(), apiToken, apiSecret, dataCenter);
+            
+            // Configuration options
+            if (!data.isNull(3)) {
+                JSONObject options = data.getJSONObject(3);
+                Iterator<String> keys = options.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    
+                    if (key.equals("type")) {
+                        documentVerificationSDK.setType(options.getString(key));
+                    } else if (key.equals("customDocumentCode")) {
+                        documentVerificationSDK.setCustomDocumentCode(options.getString(key));
+                    } else if (key.equals("country")) {
+                        documentVerificationSDK.setCountry(options.getString(key));
+                    } else if (key.equals("merchantReportingCriteria")) {
+                        documentVerificationSDK.setMerchantReportingCriteria(options.getString(key));
+                    } else if (key.equals("callbackUrl")) {
+                        documentVerificationSDK.setCallbackUrl(options.getString(key));
+                    } else if (key.equals("additionalInformation")) {
+                        documentVerificationSDK.setAdditionalInformation(options.getString(key));
+                    } else if (key.equals("merchantScanReference")) {
+                        documentVerificationSDK.setMerchantScanReference(options.getString(key));
+                    } else if (key.equals("customerId")) {
+                        documentVerificationSDK.setCustomerId(options.getString(key));
+                    } else if (key.equals("showHelpBeforeScan")) {
+                        documentVerificationSDK.setShowHelpBeforeScan(options.getBoolean(key));
+                    } else if (key.equals("documentName")) {
+                        documentVerificationSDK.setDocumentName(options.getString(key));
+                    } else if (key.equals("cameraPosition")) {
+                        // TODO: Camera position
+                        //documentVerificationSDK.setCameraPosition();
+                    }
+                }
+            }
+            
+            // Configuration options
+            if (!data.isNull(3)) {
+                JSONObject options = data.getJSONObject(3);
+                Iterator<String> keys = options.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    
+                    // ...
+                }
+            }
+        } catch (JSONException e) {
+            showErrorMessage("Invalid parameters: " + e.getLocalizedMessage());
+        } catch (PlatformNotSupportedException e) {
+            showErrorMessage("Error initializing the Document-Verification SDK: " + e.getLocalizedMessage());
+        }
+    }
+    
+    private void startDocumentVerification(JSONArray data) {
+        if (documentVerificationSDK == null) {
+            showErrorMessage("The Document-Verification SDK is not initialized yet. Call initDocumentVerification() first.");
+            return;
+        }
+        
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkPermissionsAndStart(documentVerificationSDK);
+                } catch (Exception e) {
+                    showErrorMessage("Error starting the Document-Verification SDK: " + e.getLocalizedMessage());
+                }
+            }
+        };
+        
+        this.cordova.setActivityResultCallback(this);
+        this.cordova.getActivity().runOnUiThread(runnable);
+    }
+    
     
     // PERMISSIONS
     
@@ -250,7 +395,7 @@ public class JumioMobileSDK extends CordovaPlugin {
             else if (sdk instanceof MultiDocumentSDK)
                 code = PERMISSION_REQUEST_CODE_MULTI_DOCUMENT;
             else {
-                Toast.makeText(cordova.getActivity().getApplicationContext(), "Invalid SDK instance", Toast.LENGTH_LONG).show();
+                showErrorMessage("Invalid SDK instance");
                 return;
             }
             
@@ -276,10 +421,10 @@ public class JumioMobileSDK extends CordovaPlugin {
             } else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_NETVERIFY) {
                 startSdk(this.netverifySDK);
             } else if (requestCode == JumioMobileSDK.PERMISSION_REQUEST_CODE_MULTI_DOCUMENT) {
-                startSdk(this.multiDocumentSDK);
+                startSdk(this.documentVerificationSDK);
             }
         } else {
-            Toast.makeText(this.cordova.getActivity().getApplicationContext(), "You need to grant all required permissions to start the Jumio SDK", Toast.LENGTH_LONG).show();
+            showErrorMessage("You need to grant all required permissions to start the Jumio SDK.");
             super.onRequestPermissionResult(requestCode, permissions, grantResults);
         }
     }
@@ -313,8 +458,12 @@ public class JumioMobileSDK extends CordovaPlugin {
                     callbackContext.success(result);
                     cardInformation.clear();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    showErrorMessage("Result could not be sent. Try again.");
                 }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                int errorCode = intent.getIntExtra(BamSDK.EXTRA_ERROR_CODE, 0);
+                String errorMsg = intent.getStringExtra(BamSDK.EXTRA_ERROR_MESSAGE);
+                showErrorMessage("Cancelled with error code: " + errorCode + ": " + errorMsg);
             }
         } else if (requestCode == NetverifySDK.REQUEST_CODE) {
             // NETVERIFY Results
@@ -361,8 +510,20 @@ public class JumioMobileSDK extends CordovaPlugin {
                     
                     callbackContext.success(result);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    showErrorMessage("Result could not be sent: " + e.getLocalizedMessage());
                 }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                int errorCode = intent.getIntExtra(NetverifySDK.EXTRA_ERROR_CODE, 0);
+                String errorMsg = intent.getStringExtra(NetverifySDK.EXTRA_ERROR_MESSAGE);
+                showErrorMessage("Cancelled with error code: " + errorCode + ": " + errorMsg);
+            }
+        } else if (requestCode == MultiDocumentSDK.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                callbackContext.success("Document-Verification finished successfully.");
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                int errorCode = intent.getIntExtra(MultiDocumentSDK.EXTRA_ERROR_CODE, 0);
+                String errorMsg = intent.getStringExtra(MultiDocumentSDK.EXTRA_ERROR_MESSAGE);
+                showErrorMessage("Cancelled with error code: " + errorCode + ": " + errorMsg);
             }
         }
     }
@@ -375,5 +536,10 @@ public class JumioMobileSDK extends CordovaPlugin {
         } catch (MissingPermissionException e) {
             Toast.makeText(cordova.getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+    
+    private void showErrorMessage(String msg) {
+        Log.e(TAG, msg);
+        callbackContext.error(msg);
     }
 }
