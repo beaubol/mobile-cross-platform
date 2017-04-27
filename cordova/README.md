@@ -153,7 +153,7 @@ DATACENTER can either be **us** or **eu**.
 
  
 
-Configure the SDK with the *options*-Object. (options marked with ***** are mandatory)
+Configure the SDK with the *options*-Object. (options marked with * are mandatory)
 
 | Option | Datatype | Description |
 | ------ | -------- | ----------- |
