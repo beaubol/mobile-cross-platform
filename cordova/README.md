@@ -27,7 +27,7 @@ Add the Jumio repository:
 
 ```
 repositories {
-maven { url 'http://mobile-sdk.jumio.com' }
+    maven { url 'http://mobile-sdk.jumio.com' }
 }
 ```
 
@@ -35,7 +35,7 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-SDK_VERSION = "2.6.0"
+    SDK_VERSION = "2.6.0"
 }
 ```
 
@@ -43,29 +43,29 @@ Add your needed dependencies:
 
 ```
 dependencies {
-compile "com.jumio.android:core:${SDK_VERSION}@aar"
-compile "com.jumio.android:bam:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv-barcode:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv-barcode-vision:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv-mrz:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv-nfc:${SDK_VERSION}@aar"
-compile "com.jumio.android:nv-ocr:${SDK_VERSION}@aar"
-compile "com.jumio.android:md:${SDK_VERSION}@aar"
+    compile "com.jumio.android:core:${SDK_VERSION}@aar"
+    compile "com.jumio.android:bam:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv-barcode:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv-barcode-vision:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv-mrz:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv-nfc:${SDK_VERSION}@aar"
+    compile "com.jumio.android:nv-ocr:${SDK_VERSION}@aar"
+    compile "com.jumio.android:md:${SDK_VERSION}@aar"
 
-//for core:
-compile "com.android.support:support-v4:25.0.0"
-compile "com.android.support:appcompat-v7:25.0.0"
+    //for core:
+    compile "com.android.support:support-v4:25.0.0"
+    compile "com.android.support:appcompat-v7:25.0.0"
 
-//for nv:
-compile "com.android.support:design:25.0.0"
+    //for nv:
+    compile "com.android.support:design:25.0.0"
 
-//only for nv-nfc
-compile "com.madgag.spongycastle:prov:1.54.0.0"
-compile "net.sf.scuba:scuba-sc-android:0.0.10"
+    //only for nv-nfc
+    compile "com.madgag.spongycastle:prov:1.54.0.0"
+    compile "net.sf.scuba:scuba-sc-android:0.0.10"
 
-//only for nv-barcode-vision
-compile "com.google.android.gms:play-services-vision:9.6.1"
+    //only for nv-barcode-vision
+    compile "com.google.android.gms:play-services-vision:9.6.1"
 }
 ```
 
@@ -77,13 +77,26 @@ compile "com.google.android.gms:play-services-vision:9.6.1"
 Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
-<DATACENTER> can either be *us* or *eu*.
+DATACENTER can either be *us* or *eu*.
+
+
 Configure the SDK with the *options*-Object.
 
 | Option | Datatype |
 | ------ | -------- |
 | cardHolderNameRequired | Boolean |
 | sortCodeAndAccountNumberRequired | Boolean |
+| expiryRequired | Boolean |
+| cvvRequired | Boolean |
+| expiryEditable | Boolean |
+| cardHolderNameEditable | Boolean |
+| merchantReportingCriteria | String |
+| vibrationEffectEnabled | Boolean |
+| enableFlashOnScanStart | Boolean |
+| cardNumberMaskingEnabled | Boolean |
+| adyenPublicKey | String |
+
+
 
 
 
