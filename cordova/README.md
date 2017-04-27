@@ -153,14 +153,14 @@ DATACENTER can either be **us** or **eu**.
 
  
 
-Configure the SDK with the *options*-Object. (options marked with * are mandatory)
+Configure the SDK with the *options*-Object. (options marked with ***** are mandatory)
 
 | Option | Datatype | Description |
 | ------ | -------- | ----------- |
 | **type*** | String | See the list below |
-| customDocumentCode* | String | Set your custom document code (set in the merchatn backend under "Settings" - "Multi Documents" - "Custom" |
-| country* | String | Set the country (ISO-3166-1 alpha-3 code) |
-| merchantScanReference* | String | Allows you to identify the scan (max. 100 characters) |
+| **customDocumentCode*** | String | Set your custom document code (set in the merchatn backend under "Settings" - "Multi Documents" - "Custom" |
+| **country*** | String | Set the country (ISO-3166-1 alpha-3 code) |
+| **merchantScanReference*** | String | Allows you to identify the scan (max. 100 characters) |
 | merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
 | callbackUrl | String | Specify an URL for individual transactions |
 | additionalInformation | String | Add additional paramter (max. 255 characters) |
