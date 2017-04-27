@@ -110,7 +110,7 @@ public class JumioMobileSDK extends CordovaPlugin {
     // BAM
     
     private void initBAM(JSONArray data) {
-        if (BamSDK.isRooted()) {
+        if (BamSDK.isRooted(cordova.getActivity().getApplicationContext())) {
             showErrorMessage("The BAM SDK can't run on a rooted device.");
             return;
         }
@@ -247,8 +247,6 @@ public class JumioMobileSDK extends CordovaPlugin {
                         netverifySDK.sendDebugInfoToJumio(options.getBoolean(key));
                     } else if (key.equals("dataExtractionOnMobileOnly")) {
                         netverifySDK.setDataExtractionOnMobileOnly(options.getBoolean(key));
-                    } else if (key.equals("showHelpBeforeScan")) {
-                        netverifySDK.setShowHelpBeforeScan(options.getBoolean(key));
                     } else if (key.equals("cameraPosition")) {
                         // TODO: Camera position
                         //netverifySDK.setCameraPosition();

@@ -12,10 +12,9 @@ cordova plugin add cordova-plugin-jumio-mobilesdk
 
 ### Android
 
-Open the android project of your cordova project located in /platforms/android.
-Open the **build.gradle** file. (Module: android)
+Open the android project of your cordova project located in /platforms/android and open the **build.gradle** file. (Module: android)
 
-Add the jumio repository:
+Add the Jumio repository:
 
 ```
 repositories {
@@ -27,7 +26,7 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-SDK_VERSION = "2.5.0"
+SDK_VERSION = "2.6.0"
 }
 ```
 
@@ -58,9 +57,8 @@ compile "net.sf.scuba:scuba-sc-android:0.0.10"
 
 //only for nv-barcode-vision
 compile "com.google.android.gms:play-services-vision:9.6.1"
-
-...
 }
 ```
+
 
 
