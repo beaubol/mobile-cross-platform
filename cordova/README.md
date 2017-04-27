@@ -10,6 +10,12 @@ Add the plugin to your Cordova project.
 cordova plugin add cordova-plugin-jumio-mobilesdk
 ```
 
+## Integration
+
+### iOS
+
+...
+
 ### Android
 
 Open the android project of your cordova project located in /platforms/android and open the **build.gradle** file. (Module: android)
