@@ -103,3 +103,36 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 ```
 Jumio.startBAM(successCallback, errorCallback);
 ```
+
+### Netverify / Fastfill
+
+To initialize the SDK, perform the following call.
+
+```
+Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
+```
+
+DATACENTER can either be **us** or **eu**.
+
+
+Configure the SDK with the *options*-Object.
+
+| Option | Datatype |
+| ------ | -------- |
+| requireVerification | Boolean |
+| callbackUrl | String |
+| requireFaceMatch | Boolean |
+| preselectedCountry | Boolean |
+| merchantScanReference | String |
+| merchantReportingCriteria | String |
+| customerId | String |
+| additionalInformation | String |
+| enableEpassport | Boolean |
+| sendDebugInfoToJumio | Boolean |
+| dataExtractionOnMobileOnly | Boolean |
+
+As soon as the sdk is initialized, the sdk is started by the following call.
+
+```
+Jumio.startNetverify(successCallback, errorCallback);
+```
