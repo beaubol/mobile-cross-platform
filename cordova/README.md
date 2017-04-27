@@ -84,19 +84,19 @@ DATACENTER can either be **us** or **eu**.
 
 Configure the SDK with the *options*-Object.
 
-| Option | Datatype |
-| ------ | -------- |
-| cardHolderNameRequired | Boolean |
-| sortCodeAndAccountNumberRequired | Boolean |
-| expiryRequired | Boolean |
+| Option | Datatype | Description |
+| ------ | -------- | ----------- |
+| cardHolderNameRequired | Boolean | 
+| sortCodeAndAccountNumberRequired | Boolean | 
+| expiryRequired | Boolean | 
 | cvvRequired | Boolean |
 | expiryEditable | Boolean |
 | cardHolderNameEditable | Boolean |
-| merchantReportingCriteria | String |
+| merchantReportingCriteria | String | Overwrite your specified reporting criteria to identify each scan attempt in your reports (max. 100 characters)
 | vibrationEffectEnabled | Boolean |
 | enableFlashOnScanStart | Boolean |
 | cardNumberMaskingEnabled | Boolean |
-| adyenPublicKey | String |
+| adyenPublicKey | String | Use the following option to support the Adyen client-side-encryption.
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
