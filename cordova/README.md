@@ -117,19 +117,19 @@ DATACENTER can either be **us** or **eu**.
 
 Configure the SDK with the *options*-Object.
 
-| Option | Datatype |
-| ------ | -------- |
-| requireVerification | Boolean |
-| callbackUrl | String |
-| requireFaceMatch | Boolean |
-| preselectedCountry | Boolean |
-| merchantScanReference | String |
-| merchantReportingCriteria | String |
-| customerId | String |
-| additionalInformation | String |
-| enableEpassport | Boolean |
-| sendDebugInfoToJumio | Boolean |
-| dataExtractionOnMobileOnly | Boolean |
+| Option | Datatype | Description |
+| ------ | -------- | ----------- |
+| requireVerification | Boolean | Enable ID verification |
+| callbackUrl | String | Specify an URL for individual transactions |
+| requireFaceMatch | Boolean | Enable face match during the ID verification for a specific transaction |
+| preselectedCountry | Boolean | Specify the issuing country (ISO 3166-1 alpha-3 country code) |
+| merchantScanReference | String | Allows you to identify the scan (max. 100 characters) |
+| merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
+| customerId | String | Set a customer identifier (max. 100 characters) |
+| additionalInformation | String | Add additional paramter (max. 255 characters) |
+| enableEpassport | Boolean | Read the NFC chip of an ePassport |
+| sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
+| dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
