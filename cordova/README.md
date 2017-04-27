@@ -75,7 +75,7 @@ dependencies {
 
 To Initialize the SDK, perform the following call.
 
-```
+```javascript
 Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
@@ -101,7 +101,7 @@ Configure the SDK with the *options*-Object.
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
-```
+```javascript
 Jumio.startBAM(successCallback, errorCallback);
 ```
  
@@ -110,7 +110,7 @@ Jumio.startBAM(successCallback, errorCallback);
 
 To initialize the SDK, perform the following call.
 
-```
+```javascript
 Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
@@ -136,7 +136,7 @@ Configure the SDK with the *options*-Object.
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
-```
+```javascript
 Jumio.startNetverify(successCallback, errorCallback);
 ```
 
@@ -145,7 +145,7 @@ Jumio.startNetverify(successCallback, errorCallback);
 
 To initialize the SDK, perform the following call.
 
-```
+```javascript
 Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
 ```
 
@@ -170,7 +170,7 @@ Configure the SDK with the *options*-Object. **(options marked with * are mandat
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
-```
+```javascript
 Jumio.startDocumentVerification(successCallback, errorCallback);
 ```
  
