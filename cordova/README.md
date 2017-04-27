@@ -168,3 +168,7 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 ```
 Jumio.startDocumentVerification(successCallback, errorCallback);
 ```
+
+## Callback
+
+JSONObject with all the extracted data.
