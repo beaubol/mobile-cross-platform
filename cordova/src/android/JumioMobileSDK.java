@@ -37,13 +37,18 @@ import android.widget.Toast;
 import com.jumio.MobileSDK;
 import com.jumio.bam.*;
 import com.jumio.bam.custom.*;
+import com.jumio.bam.enums.CreditCardType;
 import com.jumio.commons.json.JSON;
 import com.jumio.core.enums.*;
 import com.jumio.core.exceptions.*;
 import com.jumio.md.MultiDocumentSDK;
 import com.jumio.nv.*;
+import com.jumio.nv.data.document.NVDocumentType;
+import com.jumio.nv.data.document.NVDocumentVariant;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class JumioMobileSDK extends CordovaPlugin {
     
@@ -162,11 +167,40 @@ public class JumioMobileSDK extends CordovaPlugin {
                     } else if (key.equals("adyenPublicKey")) {
                         bamSDK.setAdyenPublicKey(options.getString(key));
                     } else if (key.equals("cameraPosition")) {
-                        // TODO: Camera position
-                        //bamSDK.setCameraPosition();
+                        JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
+                        bamSDK.setCameraPosition(cameraPosition);
                     } else if (key.equals("cardTypes")) {
-                        // TODO: Card types
-                        //bamSDK.setSupportedCreditCardTypes();
+                        JSONArray jsonTypes = options.getJSONArray(key);
+                        ArrayList<String> types = new ArrayList<String>();
+                        if (jsonTypes != null) {
+                            int len = jsonTypes.length();
+                            for (int i=0;i<len;i++){
+                                types.add(jsonTypes.get(i).toString());
+                            }
+                        }
+                        
+                        ArrayList<CreditCardType> creditCardTypes = new ArrayList<CreditCardType>();
+                        for (String type : types) {
+                            if (type.toLowerCase().equals("visa")) {
+                                creditCardTypes.add(CreditCardType.VISA);
+                            } else if (type.toLowerCase().equals("master_card")) {
+                                creditCardTypes.add(CreditCardType.MASTER_CARD);
+                            } else if (type.toLowerCase().equals("american_express")) {
+                                creditCardTypes.add(CreditCardType.AMERICAN_EXPRESS);
+                            } else if (type.toLowerCase().equals("china_unionpay")) {
+                                creditCardTypes.add(CreditCardType.CHINA_UNIONPAY);
+                            } else if (type.toLowerCase().equals("diners_club")) {
+                                creditCardTypes.add(CreditCardType.DINERS_CLUB);
+                            } else if (type.toLowerCase().equals("discover")) {
+                                creditCardTypes.add(CreditCardType.DISCOVER);
+                            } else if (type.toLowerCase().equals("jcb")) {
+                                creditCardTypes.add(CreditCardType.JCB);
+                            } else if (type.toLowerCase().equals("starbucks")) {
+                                creditCardTypes.add(CreditCardType.STARBUCKS);
+                            }
+                        }
+                        
+                        bamSDK.setSupportedCreditCardTypes(creditCardTypes);
                     }
                 }
             }
@@ -248,12 +282,35 @@ public class JumioMobileSDK extends CordovaPlugin {
                     } else if (key.equals("dataExtractionOnMobileOnly")) {
                         netverifySDK.setDataExtractionOnMobileOnly(options.getBoolean(key));
                     } else if (key.equals("cameraPosition")) {
-                        // TODO: Camera position
-                        //netverifySDK.setCameraPosition();
+                        JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
+                        bamSDK.setCameraPosition(cameraPosition);
                     } else if (key.equals("preselectedDocumentVariant")) {
-                        // TODO: Document Variant
+                        NVDocumentVariant variant = (options.getString(key).toLowerCase().equals("paper")) ? NVDocumentVariant.PAPER : NVDocumentVariant.PLASTIC;
+                        netverifySDK.setPreselectedDocumentVariant(variant);
                     } else if (key.equals("documentTypes")) {
-                        // TODO: Document Types
+                        JSONArray jsonTypes = options.getJSONArray(key);
+                        ArrayList<String> types = new ArrayList<String>();
+                        if (jsonTypes != null) {
+                            int len = jsonTypes.length();
+                            for (int i=0;i<len;i++){
+                                types.add(jsonTypes.get(i).toString());
+                            }
+                        }
+                        
+                        ArrayList<NVDocumentType> documentTypes = new ArrayList<NVDocumentType>();
+                        for (String type : types) {
+                            if (type.toLowerCase().equals("passport")) {
+                                documentTypes.add(NVDocumentType.PASSPORT);
+                            } else if (type.toLowerCase().equals("driver_license")) {
+                                documentTypes.add(NVDocumentType.DRIVER_LICENSE);
+                            } else if (type.toLowerCase().equals("identity_card")) {
+                                documentTypes.add(NVDocumentType.IDENTITY_CARD);
+                            } else if (type.toLowerCase().equals("visa")) {
+                                documentTypes.add(NVDocumentType.VISA);
+                            }
+                        }
+                        
+                        netverifySDK.setPreselectedDocumentTypes(documentTypes);
                     }
                 }
             }
@@ -333,8 +390,8 @@ public class JumioMobileSDK extends CordovaPlugin {
                     } else if (key.equals("documentName")) {
                         documentVerificationSDK.setDocumentName(options.getString(key));
                     } else if (key.equals("cameraPosition")) {
-                        // TODO: Camera position
-                        //documentVerificationSDK.setCameraPosition();
+                        JumioCameraPosition cameraPosition = (options.getString(key).toLowerCase().equals("front")) ? JumioCameraPosition.FRONT : JumioCameraPosition.BACK;
+                        bamSDK.setCameraPosition(cameraPosition);
                     }
                 }
             }
