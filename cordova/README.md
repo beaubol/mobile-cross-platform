@@ -99,6 +99,17 @@ Configure the SDK with the *options*-Object.
 | cardNumberMaskingEnabled | Boolean |
 | adyenPublicKey | String | Use the following option to support the Adyen client-side-encryption.
 
+Initialization example with options.
+
+```javascript
+Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+    cardHolderNameRequired: false,
+    expiryRequired: true,
+    cvvRequired: true
+});
+```
+
+
 As soon as the sdk is initialized, the sdk is started by the following call.
 
 ```javascript
@@ -134,6 +145,16 @@ Configure the SDK with the *options*-Object.
 | sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
 | dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
 
+Initialization example with options.
+
+```javascript
+Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+    requireVerification: false,
+    customerID: "123456789",
+    preselectedCountry: "AUT"
+});
+```
+
 As soon as the sdk is initialized, the sdk is started by the following call.
 
 ```javascript
@@ -167,6 +188,17 @@ Configure the SDK with the *options*-Object. **(options marked with * are mandat
 | showHelpBeforeScan | Boolean | Show/Hide the help screen before scanning |
 | documentName | String | Override the document label on the help screen |
 | customDocumentCode | String | Set your custom document code (set in the merchatn backend under "Settings" - "Multi Documents" - "Custom" |
+
+Initialization example with options.
+
+```javascript
+Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+    type: "BS",
+    customerId: "123456789",
+    country: "AUT",
+    merchantScanReference: "123456789"
+});
+```
 
 As soon as the sdk is initialized, the sdk is started by the following call.
 
