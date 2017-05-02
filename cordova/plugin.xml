@@ -62,6 +62,16 @@
         </config-file>
         <proguard-config>
             -keep class com.jumio.** { *; }
+            -keep class net.sf.scuba.smartcards.IsoDepCardService {*;}
+            -keep class org.jmrtd.** { *; }
+            -keep class net.sf.scuba.** {*;}
+            -keep class org.spongycastle.** {*;}
+            -keep class org.ejbca.** {*;}
+            
+            -dontwarn java.nio.**
+            -dontwarn org.codehaus.**
+            -dontwarn org.ejbca.**
+            -dontwarn org.spongycastle.**
         </proguard-config>
         <source-file src="src/android/JumioMobileSDK.java" target-dir="src/com/jumio/mobilesdk" />
     </platform>
