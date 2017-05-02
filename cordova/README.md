@@ -99,7 +99,9 @@ Configure the SDK with the *options*-Object.
 | enableFlashOnScanStart | Boolean |
 | cardNumberMaskingEnabled | Boolean |
 | adyenPublicKey | String | Use the following option to support the Adyen client-side-encryption.
-| offlineToken *(iOS only)* | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token.
+| offlineToken *(iOS only)* | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. |
+| cameraPosition | String | Which camera is used by default. Can be **front** or **back**. |
+| cardTypes | String-Array | An array of accepted card types. Available card types: **visa**, **master_card**, **american_express**, **china_unionpay**, **diners_club**, **discover**, **jcb**, **starbucks** |
 
 Initialization example with options.
 
