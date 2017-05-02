@@ -99,6 +99,7 @@ Configure the SDK with the *options*-Object.
 | enableFlashOnScanStart | Boolean |
 | cardNumberMaskingEnabled | Boolean |
 | adyenPublicKey | String | Use the following option to support the Adyen client-side-encryption.
+| offlineToken *(iOS only)* | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token.
 
 Initialization example with options.
 
@@ -142,7 +143,7 @@ Configure the SDK with the *options*-Object.
 | merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
 | customerId | String | Set a customer identifier (max. 100 characters) |
 | additionalInformation | String | Add additional paramter (max. 255 characters) |
-| enableEpassport | Boolean | Read the NFC chip of an ePassport |
+| enableEpassport *(android only)* | Boolean | Read the NFC chip of an ePassport |
 | sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
 | dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
 
@@ -186,9 +187,9 @@ Configure the SDK with the *options*-Object. **(options marked with * are mandat
 | merchantReportingCriteria | String | Use this option to identify the scan in your reports (max. 100 characters) |
 | callbackUrl | String | Specify an URL for individual transactions |
 | additionalInformation | String | Add additional paramter (max. 255 characters) |
-| showHelpBeforeScan | Boolean | Show/Hide the help screen before scanning |
+| showHelpBeforeScan *(android only)* | Boolean | Show/Hide the help screen before scanning |
 | documentName | String | Override the document label on the help screen |
-| customDocumentCode | String | Set your custom document code (set in the merchatn backend under "Settings" - "Multi Documents" - "Custom" |
+| customDocumentCode | String | Set your custom document code (set in the merchant backend under "Settings" - "Multi Documents" - "Custom" |
 
 Initialization example with options.
 
