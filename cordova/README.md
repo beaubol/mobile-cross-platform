@@ -108,8 +108,9 @@ Initialization example with options.
 ```javascript
 Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
     cardHolderNameRequired: false,
-    expiryRequired: true,
-    cvvRequired: true
+    cvvRequired: true,
+    cameraPosition: "back",
+    cardTypes: ["visa", "master_card"]
 });
 ```
 
@@ -148,6 +149,10 @@ Configure the SDK with the *options*-Object.
 | enableEpassport *(android only)* | Boolean | Read the NFC chip of an ePassport |
 | sendDebugInfoToJumio | Boolean | Send debug information to Jumio. |
 | dataExtractionOnMobileOnly | Boolean | Limit data extraction to be done on device only |
+| cameraPosition | String | Which camera is used by default. Can be **front** or **back**. |
+| preselectedDocumentVariant | String | Which types of document variants are available. Can be **paper** or **plastic** |
+| documentTypes | String-Array | An array of accepted document types: Available document types: **passport**, **driver_license**, **identity_card**, **visa** |
+
 
 Initialization example with options.
 
@@ -155,7 +160,9 @@ Initialization example with options.
 Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
     requireVerification: false,
     customerID: "123456789",
-    preselectedCountry: "AUT"
+    preselectedCountry: "AUT",
+    cameraPosition: "back",
+    documentTypes: ["driver_license", "passport"]
 });
 ```
 
@@ -192,6 +199,7 @@ Configure the SDK with the *options*-Object. **(options marked with * are mandat
 | showHelpBeforeScan *(android only)* | Boolean | Show/Hide the help screen before scanning |
 | documentName | String | Override the document label on the help screen |
 | customDocumentCode | String | Set your custom document code (set in the merchant backend under "Settings" - "Multi Documents" - "Custom" |
+| cameraPosition | String | Which camera is used by default. Can be **front** or **back**. |
 
 Initialization example with options.
 
@@ -200,7 +208,8 @@ Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
     type: "BS",
     customerId: "123456789",
     country: "AUT",
-    merchantScanReference: "123456789"
+    merchantScanReference: "123456789",
+    cameraPosition: "front"
 });
 ```
 
