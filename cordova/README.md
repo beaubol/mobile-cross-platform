@@ -4,6 +4,7 @@ Official Jumio Mobile-SDK plugin for Apache Cordova
 
 ## Requirements
 * Jumio Mobile SDK Android 2.6.0+, iOS 2.5.0+
+* CocoaPods for iOS.
 
 ## Setup
 
@@ -17,7 +18,7 @@ cordova plugin add cordova-plugin-jumio-mobilesdk
 
 ### iOS
 
-...
+Nothing to do. Cocoapods handles everything.
 
 ### Android
 
