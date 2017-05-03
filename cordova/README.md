@@ -1,6 +1,7 @@
-# Apache Cordova
+# Plugin for Apache Cordova
 
 Official Jumio Mobile-SDK plugin for Apache Cordova
+© Jumio Corp. 268 Lambert Avenue, Palo Alto, CA 94306
 
 ## Requirements
 * Jumio Mobile SDK Android 2.6.0+, iOS 2.5.0+
