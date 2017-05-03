@@ -23,3 +23,15 @@ exports.initBAM = function(token, secret, datacenter, options) {
 exports.startBAM = function(success, error) {
     exec(success, error, "JumioMobileSDK", "startBAM", []);
 };
+
+exports.initDocumentVerification = function(token, secret, datacenter, options) {
+    exec(function(success) { console.log("DocumentVerification::init Success: " + success) }, 
+		 function(error) { console.log("DocumentVerification::init Error: " + error) },
+		 "JumioMobileSDK", 
+		 "initDocumentVerification", 
+		 [token, secret, datacenter, options]);
+};
+
+exports.startDocumentVerification = function(success, error) {
+    exec(success, error, "JumioMobileSDK", "startDocumentVerification", []);
+};
