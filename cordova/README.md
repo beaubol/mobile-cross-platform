@@ -201,6 +201,35 @@ Configure the SDK with the *options*-Object. **(options marked with * are mandat
 | customDocumentCode | String | Set your custom document code (set in the merchant backend under "Settings" - "Multi Documents" - "Custom" |
 | cameraPosition | String | Which camera is used by default. Can be **front** or **back**. |
 
+Possible types:
+
+*  BS (Bank statement)
+*  IC (Insurance card)
+*  UB (Utility bill, front side)
+*  CAAP (Cash advance application)
+*  CRC (Corporate resolution certificate)
+*  CCS (Credit card statement)
+*  LAG (Lease agreement)
+*  LOAP (Loan application)
+*  MOAP (Mortgage application)
+*  TR (Tax return)
+*  VT (Vehicle title)
+*  VC (Voided check)
+*  STUC (Student card)
+*  HCC (Health care card)
+*  CB (Council bill)
+*  SENC (Seniors card)
+*  MEDC (Medicare card)
+*  BC (Birth certificate)
+*  WWCC (Working with children check)
+*  SS (Superannuation statement)
+*  TAC (Trade association card)
+*  SEL (School enrolment letter)
+*  PB (Phone bill)
+*  USSS (US social security card)
+*  SSC (Social security card)
+*  CUSTOM (Custom document type)
+
 Initialization example with options.
 
 ```javascript
