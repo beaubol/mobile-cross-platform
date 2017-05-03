@@ -106,7 +106,7 @@ Configure the SDK with the *options*-Object.
 Initialization example with options.
 
 ```javascript
-Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+Jumio.initBAM("123", "456", "us", {
     cardHolderNameRequired: false,
     cvvRequired: true,
     cameraPosition: "back",
@@ -157,7 +157,7 @@ Configure the SDK with the *options*-Object.
 Initialization example with options.
 
 ```javascript
-Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+Jumio.initNetverify("123", "456", "us", {
     requireVerification: false,
     customerID: "123456789",
     preselectedCountry: "AUT",
@@ -233,7 +233,7 @@ Possible types:
 Initialization example with options.
 
 ```javascript
-Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
+Jumio.initDocumentVerification("123", "456", "us", {
     type: "BS",
     customerId: "123456789",
     country: "AUT",
