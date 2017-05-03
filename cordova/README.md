@@ -1,6 +1,7 @@
 # Plugin for Apache Cordova
 
 Official Jumio Mobile-SDK plugin for Apache Cordova
+
 © Jumio Corp. 268 Lambert Avenue, Palo Alto, CA 94306
 
 ## Requirements
