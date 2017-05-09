@@ -272,11 +272,6 @@ JSONObject with all the extracted data.
 | cardAccountNumberValid | BOOL |  | True if account number code valid, otherwise false |
 | encryptedAdyenString | NSString |  | Encrypted ADYEN string |
 
-| Method | Parameter type | Return type | Description |
-| --------------------|:-------|:-------|:-------------|
-| clear | | | Clear card information |
-| getCustomField | NSString | NSString | Get entered value for added custom field |
-
 ### Netverify + Fastfill
 
 | Parameter | Type | Max. length | Description  |
