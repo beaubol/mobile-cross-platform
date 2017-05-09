@@ -253,6 +253,75 @@ Jumio.startDocumentVerification(successCallback, errorCallback);
 
 JSONObject with all the extracted data.
 
+### BAM Checkout
+
+|Parameter | Type | Max. length | Description |
+|:---------------------------- 	|:-------------|:-----------------|:-------------|
+| cardType | NetswipeCreditCardType |  |  NetswipeCreditCardTypeAmericanExpress, NetswipeCreditCardTypeChinaUnionPay, NetswipeCreditCardTypeDiners, NetswipeCreditCardTypeDiscover, NetswipeCreditCardTypeJCB, NetswipeCreditCardTypeMasterCard, NetswipeCreditCardTypeVisa or NetswipeCreditCardTypeStarbucks  |
+| cardNumber | NSMutableString | 16 | Full credit card number |
+| cardNumberGrouped | NSMutableString | 19 | Grouped credit card number |
+| cardNumberMasked | NSMutableString | 19 | First 6 and last 4 digits of the grouped credit card number, other digits are masked with "X" |
+| cardExpiryMonth | NSMutableString | 2 | Month card expires if enabled and readable |
+| CardExpiryYear | NSMutableString | 2 | Year card expires if enabled and readable |
+| cardExpiryDate | NSMutableString | 5 | Date card expires in the format MM/yy if enabled and readable |
+| cardCVV | NSMutableString | 4 | Entered CVV if enabled |
+| cardHolderName | NSMutableString | 100 | Name of the card holder in capital letters if enabled and readable, or as entered if editable |
+| cardSortCode | NSMutableString | 8 | Sort code in the format xx-xx-xx or xxxxxx if enabled, available and readable |
+| cardAccountNumber | NSMutableString | 8 | Account number if enabled, available and readable |
+| cardSortCodeValid | BOOL |  | True if sort code valid, otherwise false |
+| cardAccountNumberValid | BOOL |  | True if account number code valid, otherwise false |
+| encryptedAdyenString | NSString |  | Encrypted ADYEN string |
+
+| Method | Parameter type | Return type | Description |
+| --------------------|:-------|:-------|:-------------|
+| clear | | | Clear card information |
+| getCustomField | NSString | NSString | Get entered value for added custom field |
+
+### Netverify + Fastfill
+
+| Parameter | Type | Max. length | Description  |
+|:-------------------|:----------- 	|:-------------|:-----------------|
+| selectedCountry | NSString| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
+| selectedDocumentType | NetverifyDocumentType | | Passport, DriverLicense, IdentityCard and Visa |
+| idNumber | NSString | 100 | Identification number of the document |
+| personalNumber | NSString | 14| Personal number of the document|
+| issuingDate | NSDate | | Date of issue |
+| expiryDate | NSDate | | Date of expiry |
+| issuingCountry | NSString | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code |
+| lastName | NSString | 100 | Last name of the customer|
+| firstName | NSString | 100 | First name of the customer|
+| middleName | NSString | 100 | Middle name of the customer |
+| dob | NSDate | | Date of birth |
+| gender | NetverifyGender | | Gender M or F |
+| originatingCountry | NSString | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code |
+| addressLine | NSString | 64 | Street name	|
+| city | NSString | 64 | City |
+| subdivision | NSString | 3 | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	|
+| postCode | NSString | 15 | Postal code |
+| mrzData |  NetverifyMrzData | | MRZ data, see table below |
+| optionalData1 | NSString | 50 | Optional field of MRZ line 1 |
+| optionalData2 | NSString | 50 | Optional field of MRZ line 2 |
+| placeOfBirth | NSString | 255 | Place of Birth |
+| extractionMethod | NetverifyExtractionMethod | | Extraction method used during scanning (MRZ, OCR, BARCODE, BARCODE_OCR or NONE) |
+
+MRZ Data
+
+| Parameter |Type | Max. length | Description |
+|:---------------|:------------- |:-------------|:-----------------|
+| format | NetverifyMRZFormat | |
+| line1 | NSString | 50 | MRZ line 1 |
+| line2 | NSString | 50 | MRZ line 2 |
+| line3 | NSString | 50| MRZ line 3 |
+| idNumberValid | BOOL| | True if ID number check digit is valid, otherwise false |
+| dobValid | BOOL | | True if date of birth check digit is valid, otherwise false |
+| expiryDateValid |	BOOL| |	True if date of expiry check digit is valid or not available, otherwise false|
+| personalNumberValid | BOOL | | True if personal number check digit is valid or not available, otherwise false |
+| compositeValid | BOOL | | True if composite check digit is valid, otherwise false |
+
+### Document Verification
+
+All the extracted data of the document.
+
 # Copyright
 
 © Jumio Corp. 268 Lambert Avenue, Palo Alto, CA 94306
