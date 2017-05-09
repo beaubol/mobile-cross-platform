@@ -182,6 +182,16 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 Jumio.startNetverify(successCallback, errorCallback);
 ```
 
+Example
+
+```javascript
+Jumio.startNetverify(function(data) {
+    // YOUR CODE
+}, function(error) {
+    // YOUR CODE
+});
+```
+
 
 ### Document Verification
 
