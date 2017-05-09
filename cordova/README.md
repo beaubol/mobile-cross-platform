@@ -124,7 +124,7 @@ Jumio.startBAM(successCallback, errorCallback);
 Example
 
 ```javascript
-Jumio.startBAM(function(data) {
+Jumio.startBAM(function(documentData) {
     // YOUR CODE
 }, function(error) {
     // YOUR CODE
@@ -185,7 +185,7 @@ Jumio.startNetverify(successCallback, errorCallback);
 Example
 
 ```javascript
-Jumio.startNetverify(function(data) {
+Jumio.startNetverify(function(cardInformation) {
     // YOUR CODE
 }, function(error) {
     // YOUR CODE
@@ -266,6 +266,16 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 
 ```javascript
 Jumio.startDocumentVerification(successCallback, errorCallback);
+```
+
+Example
+
+```javascript
+Jumio.startDocumentVerification(function(documentData) {
+    // YOUR CODE
+}, function(error) {
+    // YOUR CODE
+});
 ```
  
 
