@@ -17,8 +17,7 @@ cordova plugin add cordova-plugin-jumio-mobilesdk
 
 ### iOS
 
-Add the Jumio Mobile SDK for iOS to your iOS project located at *platforms/ios* in your cordova project.
-If you use CocoaPods, just call **pod init** in the *platforms/ios* directory.
+Nothing to do. Cocoapods handles everything.
 
 ### Android
 

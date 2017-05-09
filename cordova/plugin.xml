@@ -5,6 +5,8 @@
         <clobbers target="Jumio" />
     </js-module>
 
+    <dependency id="cordova-plugin-cocoapod-support" />
+
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="JumioMobileSDK">
