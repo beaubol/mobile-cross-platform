@@ -287,7 +287,7 @@ JSONObject with all the extracted data.
 
 |Parameter | Type | Max. length | Description |
 |:---------------------------- 	|:-------------|:-----------------|:-------------|
-| cardType | String |  | VISA, MASTER_CARD, AMERICAN_EXPRESS, CHINA_UNIONPAY, DINERS_CLUB, DISCOVER, JCB or STARBUCKS |
+| cardType | String |  16| VISA, MASTER_CARD, AMERICAN_EXPRESS, CHINA_UNIONPAY, DINERS_CLUB, DISCOVER, JCB or STARBUCKS |
 | cardNumber | String | 16 | Full credit card number |
 | cardNumberGrouped | String | 19 | Grouped credit card number |
 | cardNumberMasked | String | 19 | First 6 and last 4 digits of the grouped credit card number, other digits are masked with "X" |
@@ -307,7 +307,7 @@ JSONObject with all the extracted data.
 | Parameter | Type | Max. length | Description  |
 |:-------------------|:----------- 	|:-------------|:-----------------|
 | selectedCountry | String| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
-| selectedDocumentType | String | | PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
+| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
 | idNumber | String | 100 | Identification number of the document |
 | personalNumber | String | 14| Personal number of the document|
 | issuingDate | Date | | Date of issue |
@@ -317,7 +317,7 @@ JSONObject with all the extracted data.
 | firstName | String | 100 | First name of the customer|
 | middleName | String | 100 | Middle name of the customer |
 | dob | Date | | Date of birth |
-| gender | String | | m or f |
+| gender | String | 1| m or f |
 | originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code |
 | addressLine | String | 64 | Street name	|
 | city | String | 64 | City |
@@ -327,13 +327,13 @@ JSONObject with all the extracted data.
 | optionalData1 | String | 50 | Optional field of MRZ line 1 |
 | optionalData2 | String | 50 | Optional field of MRZ line 2 |
 | placeOfBirth | String | 255 | Place of Birth |
-| extractionMethod | String | | MRT, OCR, BARCODE, BARCODE_OCR or NONE |
+| extractionMethod | String | 12| MRT, OCR, BARCODE, BARCODE_OCR or NONE |
 
 MRZ-Data
 
 | Parameter |Type | Max. length | Description |
 |:---------------|:------------- |:-------------|:-----------------|
-| format | String |  | MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
+| format | String |  8| MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
 | line1 | String | 50 | MRZ line 1 |
 | line2 | String | 50 | MRZ line 2 |
 | line3 | String | 50| MRZ line 3 |
