@@ -333,7 +333,7 @@ MRZ-Data
 
 | Parameter |Type | Max. length | Description |
 |:---------------|:------------- |:-------------|:-----------------|
-| format | String | MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
+| format | String |  | MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
 | line1 | String | 50 | MRZ line 1 |
 | line2 | String | 50 | MRZ line 2 |
 | line3 | String | 50| MRZ line 3 |
