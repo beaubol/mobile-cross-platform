@@ -120,6 +120,16 @@ As soon as the sdk is initialized, the sdk is started by the following call.
 ```javascript
 Jumio.startBAM(successCallback, errorCallback);
 ```
+
+Example
+
+```javascript
+Jumio.startBAM(function(data) {
+    // YOUR CODE
+}, function(error) {
+    // YOUR CODE
+});
+```
  
 
 ### Netverify / Fastfill
