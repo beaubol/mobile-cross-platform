@@ -25,7 +25,8 @@
             <source url="https://github.com/CocoaPods/Specs.git" />
             <source url="http://mobile-sdk.jumio.com/distribution.git" />
         </pods-config>
-        <pod name="JumioMobileSDK-FAT" version="2.5.0" configurations="release,debug" />
+        <pod name="JumioMobileSDK" version="2.5.0" configuration="release" />
+        <pod name="JumioMobileSDK-FAT" version="2.5.0" configuration="debug" />
     </platform>
     
     <platform name="android">
