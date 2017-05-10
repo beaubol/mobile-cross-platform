@@ -45,6 +45,6 @@ JumioModuleIOS.startNetverify();
 ```
 
 5. Now you can listen to events to retrieve the scanned data:
-5. **EventDocumentData** for Netverify results.
-5. **EventCardInfo** for BAM results.
+    5. **EventDocumentData** for Netverify results.
+    5. **EventCardInfo** for BAM results.
 
