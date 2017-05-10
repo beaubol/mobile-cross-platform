@@ -1,0 +1,23 @@
+{
+  "name": "cordova-plugin-jumio-mobilesdk",
+  "version": "1.6.0",
+  "description": "Jumio Mobile SDK Plugin for Cordova",
+  "cordova": {
+    "id": "cordova-plugin-jumio-mobilesdk",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jumio/mobile-cross-platform/tree/master/cordova"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "Jumio Software Development GmbH",
+  "license": "ISC"
+}

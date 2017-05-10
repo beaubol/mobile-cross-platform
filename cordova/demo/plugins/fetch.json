@@ -9,8 +9,8 @@
     },
     "cordova-plugin-jumio-mobilesdk": {
         "source": {
-            "type": "local",
-            "path": "../_plugin/jumio/JumioMobileSDK"
+            "type": "registry",
+            "id": "cordova-plugin-jumio-mobilesdk"
         },
         "is_top_level": true,
         "variables": {}

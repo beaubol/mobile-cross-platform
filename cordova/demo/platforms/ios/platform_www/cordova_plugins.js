@@ -14,7 +14,7 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.3.2",
     "cordova-plugin-cocoapod-support": "1.3.0",
-    "cordova-plugin-jumio-mobilesdk": "1.0.0"
+    "cordova-plugin-jumio-mobilesdk": "1.6.0"
 };
 // BOTTOM OF METADATA
 });
