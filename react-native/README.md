@@ -43,3 +43,8 @@ JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModuleIOS.startBAM();
 JumioModuleIOS.startNetverify();
 ```
+
+5. Now you can listen to events to retrieve the scanned data:
+5. **EventDocumentData** for Netverify results.
+5. **EventCardInfo** for BAM results.
+
