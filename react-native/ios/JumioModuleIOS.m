@@ -12,15 +12,10 @@
 @import Netswipe;
 
 @interface JumioModuleIOS() <NetverifyViewControllerDelegate, NetswipeViewControllerDelegate>
+
 @property (nonatomic, strong) NetverifyViewController *netverifyViewController;
 @property (nonatomic, strong) NetswipeViewController *bamViewController;
 
-@property (nonatomic, strong) NSString *apiTokenNV;
-@property (nonatomic, strong) NSString *apiSecretNV;
-@property (nonatomic) JumioDataCenter dataCenterNV;
-@property (nonatomic, strong) NSString *apiTokenBAM;
-@property (nonatomic, strong) NSString *apiSecretBAM;
-@property (nonatomic) JumioDataCenter dataCenterBAM;
 @end
 
 @implementation JumioModuleIOS
@@ -29,18 +24,25 @@ RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"EventDocumentData", @"EventCardInfo"];
+    return @[@"EventDocumentData", @"EventCardInfo", @"EventDocumentVerification"];
 }
 
-#pragma mark - Netverify
+#pragma mark - Netverify + Fastfill
 
 RCT_EXPORT_METHOD(initNetverify:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
-    _apiTokenNV = apiToken;
-    _apiSecretNV = apiSecret;
+    NetverifyConfiguration *configuration = [NetverifyConfiguration new];
+    configuration.delegate = self;
+    configuration.merchantApiToken = apiToken;
+    configuration.merchantApiSecret = apiSecret;
     NSString *dataCenterLowercase = [dataCenter lowercaseString];
-    _dataCenterNV = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
+    configuration.dataCenter = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
     
-    [self initNetverifySDK];
+    //******* optional customization *******
+    configuration.preselectedDocumentTypes = NetverifyDocumentTypeAll;
+    configuration.requireVerification = NO;
+    // ...
+    
+    _netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: configuration];
 }
 
 RCT_EXPORT_METHOD(startNetverify) {
@@ -51,12 +53,19 @@ RCT_EXPORT_METHOD(startNetverify) {
 #pragma mark - BAM Checkout
 
 RCT_EXPORT_METHOD(initBAM:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
-    _apiTokenBAM = apiToken;
-    _apiSecretBAM = apiSecret;
+    NetswipeConfiguration *configuration = [NetswipeConfiguration new];
+    configuration.delegate = self;
+    configuration.merchantApiToken = apiToken;
+    configuration.merchantApiSecret = apiSecret;
     NSString *dataCenterLowercase = [dataCenter lowercaseString];
-    _dataCenterBAM = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
+    configuration.dataCenter = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
     
-    [self initBAMSDK];
+    //******* optional customization *******
+    configuration.expiryRequired = YES;
+    configuration.cvvRequired = YES;
+    // ...
+    
+    _bamViewController = [[NetswipeViewController alloc]initWithConfiguration: configuration];
 }
 
 RCT_EXPORT_METHOD(startBAM) {
@@ -64,54 +73,96 @@ RCT_EXPORT_METHOD(startBAM) {
     [delegate.window.rootViewController presentViewController: _bamViewController animated: YES completion: nil];
 }
 
-#pragma mark - JumioInit
-
-- (void)initNetverifySDK {
-    NetverifyConfiguration *configuration = [NetverifyConfiguration new];
-    configuration.delegate = self;
-    configuration.merchantApiToken = _apiTokenNV;
-    configuration.merchantApiSecret = _apiSecretNV;
-    configuration.dataCenter = _dataCenterNV;
-    
-    //******* optional customization *******
-    configuration.preselectedDocumentTypes = NetverifyDocumentTypeAll;
-    configuration.requireVerification = NO;
-    
-    _netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: configuration];
-}
-
-- (void)initBAMSDK {
-    NetswipeConfiguration *configuration = [NetswipeConfiguration new];
-    configuration.delegate = self;
-    configuration.merchantApiToken = _apiTokenBAM;
-    configuration.merchantApiSecret = _apiSecretBAM;
-    configuration.dataCenter = _dataCenterBAM;
-    
-    //******* optional customization *******
-    configuration.expiryRequired = YES;
-    configuration.cvvRequired = YES;
-    configuration.cardHolderNameRequired = YES;
-    configuration.cardHolderNameEditable = NO;
-    configuration.sortCodeAndAccountNumberRequired = NO;
-    configuration.cardNumberMaskingEnabled = NO;
-    configuration.vibrationEffectEnabled = NO;
-    
-    _bamViewController = [[NetswipeViewController alloc]initWithConfiguration: configuration];
-}
+#pragma mark - Document Verification
+// TODO: Document Verification
 
 #pragma mark - NetverifySDKDelegate
 
 - (void) netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishWithDocumentData:(NetverifyDocumentData *)documentData scanReference:(NSString *)scanReference {
     NSLog(@"NetverifySDK finished successfully with scan reference: %@", scanReference);
     
+    // Build Result Object
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat: @"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+    
+    [result setValue: documentData.selectedCountry forKey: @"selectedCountry"];
+    if (documentData.selectedDocumentType == NetverifyDocumentTypePassport) {
+        [result setValue: @"PASSPORT" forKey: @"selectedDocumentType"];
+    } else if (documentData.selectedDocumentType == NetverifyDocumentTypeDriverLicense) {
+        [result setValue: @"DRIVER_LICENSE" forKey: @"selectedDocumentType"];
+    } else if (documentData.selectedDocumentType == NetverifyDocumentTypeIdentityCard) {
+        [result setValue: @"IDENTITY_CARD" forKey: @"selectedDocumentType"];
+    } else if (documentData.selectedDocumentType == NetverifyDocumentTypeVisa) {
+        [result setValue: @"VISA" forKey: @"selectedDocumentType"];
+    }
+    [result setValue: documentData.idNumber forKey: @"idNumber"];
+    [result setValue: documentData.personalNumber forKey: @"personalNumber"];
+    [result setValue: [formatter stringFromDate: documentData.issuingDate] forKey: @"issuingDate"];
+    [result setValue: [formatter stringFromDate: documentData.expiryDate] forKey: @"expiryDate"];
+    [result setValue: documentData.issuingCountry forKey: @"issuingCountry"];
+    [result setValue: documentData.lastName forKey: @"lastName"];
+    [result setValue: documentData.firstName forKey: @"firstName"];
+    [result setValue: documentData.middleName forKey: @"middleName"];
+    [result setValue: [formatter stringFromDate: documentData.dob] forKey: @"dob"];
+    if (documentData.gender == NetverifyGenderM) {
+        [result setValue: @"m" forKey: @"gender"];
+    } else if (documentData.gender == NetverifyGenderF) {
+        [result setValue: @"f" forKey: @"gender"];
+    }
+    [result setValue: documentData.originatingCountry forKey: @"originatingCountry"];
+    [result setValue: documentData.addressLine forKey: @"addressLine"];
+    [result setValue: documentData.city forKey: @"city"];
+    [result setValue: documentData.subdivision forKey: @"subdivision"];
+    [result setValue: documentData.postCode forKey: @"postCode"];
+    [result setValue: documentData.optionalData1 forKey: @"optionalData1"];
+    [result setValue: documentData.optionalData2 forKey: @"optionalData2"];
+    if (documentData.extractionMethod == NetverifyExtractionMethodMRZ) {
+        [result setValue: @"MRZ" forKey: @"extractionMethod"];
+    } else if (documentData.extractionMethod == NetverifyExtractionMethodOCR) {
+        [result setValue: @"OCR" forKey: @"extractionMethod"];
+    } else if (documentData.extractionMethod == NetverifyExtractionMethodBarcode) {
+        [result setValue: @"BARCODE" forKey: @"extractionMethod"];
+    } else if (documentData.extractionMethod == NetverifyExtractionMethodBarcodeOCR) {
+        [result setValue: @"BARCODE_OCR" forKey: @"extractionMethod"];
+    } else if (documentData.extractionMethod == NetverifyExtractionMethodNone) {
+        [result setValue: @"NONE" forKey: @"extractionMethod"];
+    }
+    
+    // MRZ data if available
+    if (documentData.mrzData != nil) {
+        NSMutableDictionary *mrzData = [[NSMutableDictionary alloc] init];
+        if (documentData.mrzData.format == NetverifyMRZFormatMRP) {
+            [mrzData setValue: @"MRP" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatTD1) {
+            [mrzData setValue: @"TD1" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatTD2) {
+            [mrzData setValue: @"TD2" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatCNIS) {
+            [mrzData setValue: @"CNIS" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatMRVA) {
+            [mrzData setValue: @"MRVA" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatMRVB) {
+            [mrzData setValue: @"MRVB" forKey: @"format"];
+        } else if (documentData.mrzData.format == NetverifyMRZFormatUnknown) {
+            [mrzData setValue: @"UNKNOWN" forKey: @"format"];
+        }
+        
+        [mrzData setValue: documentData.mrzData.line1 forKey: @"line1"];
+        [mrzData setValue: documentData.mrzData.line2 forKey: @"line2"];
+        [mrzData setValue: documentData.mrzData.line3 forKey: @"line3"];
+        [mrzData setValue: [NSNumber numberWithBool: documentData.mrzData.idNumberValid] forKey: @"idNumberValid"];
+        [mrzData setValue: [NSNumber numberWithBool: documentData.mrzData.dobValid] forKey: @"dobValid"];
+        [mrzData setValue: [NSNumber numberWithBool: documentData.mrzData.expiryDateValid] forKey: @"expiryDateValid"];
+        [mrzData setValue: [NSNumber numberWithBool: documentData.mrzData.personalNumberValid] forKey: @"personalNumberValid"];
+        [mrzData setValue: [NSNumber numberWithBool: documentData.mrzData.compositeValid] forKey: @"compositeValid"];
+        [result setValue: mrzData forKey: @"mrzData"];
+    }
+    
     // dismiss and send document data back to react native
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
-        [self sendEventWithName: @"EventDocumentData" body: @{
-                                                              @"firstName": documentData.firstName,
-                                                              @"lastName": documentData.lastName
-                                                              // ...
-                                                              }];
+        [self sendEventWithName: @"EventDocumentData" body: result];
     }];
 }
 
@@ -140,14 +191,45 @@ RCT_EXPORT_METHOD(startBAM) {
 - (void) netswipeViewController:(NetswipeViewController *)controller didFinishScanWithCardInformation:(NetswipeCardInformation *)cardInformation scanReference:(NSString *)scanReference {
     NSLog(@"BAMSDK finished successfully with scan reference: %@", scanReference);
     
+    // Build result object
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    
+    if (cardInformation.cardType == NetswipeCreditCardTypeVisa) {
+        [result setValue: @"VISA" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeMasterCard) {
+        [result setValue: @"MASTER_CARD" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeAmericanExpress) {
+        [result setValue: @"AMERICAN_EXPRESS" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeChinaUnionPay) {
+        [result setValue: @"CHINA_UNIONPAY" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiners) {
+        [result setValue: @"DINERS_CLUB" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiscover) {
+        [result setValue: @"DISCOVER" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeJCB) {
+        [result setValue: @"JCB" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeStarbucks) {
+        [result setValue: @"STARBUCKS" forKey: @"cardType"];
+    }
+    
+    [result setValue: [cardInformation.cardNumber copy] forKey: @"cardNumber"];
+    [result setValue: [cardInformation.cardNumberGrouped copy] forKey: @"cardNumberGrouped"];
+    [result setValue: [cardInformation.cardNumberMasked copy] forKey: @"cardNumberMasked"];
+    [result setValue: [cardInformation.cardExpiryMonth copy] forKey: @"cardExpiryMonth"];
+    [result setValue: [cardInformation.cardExpiryYear copy] forKey: @"cardExpiryYear"];
+    [result setValue: [cardInformation.cardExpiryDate copy] forKey: @"cardExpiryDate"];
+    [result setValue: [cardInformation.cardCVV copy] forKey: @"cardCVV"];
+    [result setValue: [cardInformation.cardHolderName copy] forKey: @"cardHolderName"];
+    [result setValue: [cardInformation.cardSortCode copy] forKey: @"cardSortCode"];
+    [result setValue: [cardInformation.cardAccountNumber copy] forKey: @"cardAccountNumber"];
+    [result setValue: [NSNumber numberWithBool: cardInformation.cardSortCodeValid] forKey: @"cardSortCodeValid"];
+    [result setValue: [NSNumber numberWithBool: cardInformation.cardAccountNumberValid] forKey: @"cardAccountNumberValid"];
+    [result setValue: cardInformation.encryptedAdyenString forKey: @"encryptedAdyenString"];
+    
     // send data back to react native
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion: ^(void) {
-        [self sendEventWithName:@"EventCardInfo" body:@{
-                                                        @"cardNumberGrouped": cardInformation.cardNumberGrouped,
-                                                        @"cardHolderName": cardInformation.cardHolderName
-                                                        // ...
-                                                        }];
+    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
+        [self sendEventWithName: @"EventCardInfo" body: result];
     }];
 }
 
