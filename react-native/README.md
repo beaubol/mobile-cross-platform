@@ -18,8 +18,15 @@ Official Jumio Mobile-SDK plugin for react-native.
 Now the native part is done and we head over to the react native code.
 
 1. Add "**NativeModules**" to the import of 'react-native'.
+```javascript
+import {
+    ...
+    NativeModules
+} from 'react-native';
+```
+
 2. Create a variable of your iOS module:
 ```javascript
-const {JumioModuleIOS } = NativeModules;
+const { JumioModuleIOS } = NativeModules;
 ```
 
