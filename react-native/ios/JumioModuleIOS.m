@@ -11,10 +11,11 @@
 @import Netverify;
 @import Netswipe;
 
-@interface JumioModuleIOS() <NetverifyViewControllerDelegate, NetswipeViewControllerDelegate>
+@interface JumioModuleIOS() <NetverifyViewControllerDelegate, NetswipeViewControllerDelegate, MultiDocumentViewControllerDelegate>
 
 @property (nonatomic, strong) NetverifyViewController *netverifyViewController;
 @property (nonatomic, strong) NetswipeViewController *bamViewController;
+@property (nonatomic, strong) MultiDocumentViewController *documentVerificationViewController;
 
 @end
 
@@ -46,6 +47,11 @@ RCT_EXPORT_METHOD(initNetverify:(NSString *)apiToken apiSecret:(NSString *)apiSe
 }
 
 RCT_EXPORT_METHOD(startNetverify) {
+    if (_netverifyViewController == nil) {
+        NSLog(@"The Netverify SDK is not initialized yet. Call initNetverify() first.");
+        return;
+    }
+    
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.window.rootViewController presentViewController: _netverifyViewController animated:YES completion: nil];
 }
@@ -69,12 +75,47 @@ RCT_EXPORT_METHOD(initBAM:(NSString *)apiToken apiSecret:(NSString *)apiSecret d
 }
 
 RCT_EXPORT_METHOD(startBAM) {
+    if (_bamViewController == nil) {
+        NSLog(@"The BAM SDK is not initialized yet. Call initBAM() first.");
+        return;
+    }
+    
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.window.rootViewController presentViewController: _bamViewController animated: YES completion: nil];
 }
 
 #pragma mark - Document Verification
-// TODO: Document Verification
+
+RCT_EXPORT_METHOD(initDocumentVerification:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
+    MultiDocumentConfiguration *configuration = [MultiDocumentConfiguration new];
+    configuration.delegate = self;
+    configuration.merchantApiToken = apiToken;
+    configuration.merchantApiSecret = apiSecret;
+    NSString *dataCenterLowercase = [dataCenter lowercaseString];
+    configuration.dataCenter = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
+    
+    //******* mandatory customization *******
+    configuration.type = @"BS";
+    configuration.country = @"AUT";
+    configuration.customerId = @"123456789";
+    configuration.merchantScanReference = @"123456789";
+    
+    //******* optional customization *******
+    configuration.cameraPosition = JumioCameraPositionBack;
+    // ...
+    
+    _documentVerificationViewController = [[MultiDocumentViewController alloc]initWithConfiguration: configuration];
+}
+
+RCT_EXPORT_METHOD(startDocumentVerification) {
+    if (_documentVerificationViewController == nil) {
+        NSLog(@"The Document-Verification SDK is not initialized yet. Call initDocumentVerification() first.");
+        return;
+    }
+    
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController presentViewController: _documentVerificationViewController animated: YES completion: nil];
+}
 
 #pragma mark - NetverifySDKDelegate
 
@@ -252,6 +293,27 @@ RCT_EXPORT_METHOD(startBAM) {
 
 - (void)netswipeViewController:(NetswipeViewController *)controller didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
     NSLog(@"BAMSDK cancelled with error: %@, scanReference: %@", error.localizedDescription, scanReference);
+    
+    // send error event
+    [self sendError: error];
+    
+    // dismiss
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Document Verification Delegates
+
+- (void)multiDocumentViewController:(MultiDocumentViewController *)multiDocumentViewController didFinishWithScanReference:(NSString *)scanReference {
+    NSLog(@"Document Verification finished successfully.");
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
+        [self sendEventWithName: @"EventDocumentVerification" body: @"Document Verification finished successfully."];
+    }];
+}
+
+- (void)multiDocumentViewController:(MultiDocumentViewController *)multiDocumentViewController didFinishWithError:(NSError *)error {
+    NSLog(@"Document-Verification cancelled with error: %@", error.localizedDescription);
     
     // send error event
     [self sendError: error];
