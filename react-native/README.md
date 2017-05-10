@@ -48,3 +48,22 @@ JumioModuleIOS.startNetverify();
     * **EventDocumentData** for Netverify results.
     * **EventCardInfo** for BAM results.
 
+6. First add **NativeEventEmitter** to the Import from 'react-native'.
+```javascript 
+import {
+    ...
+    NativeEventEmitter
+} from 'react-native';
+```
+
+7. Now listen to your events with the event emitter
+```javascript
+const emitter = new NativeEventEmitter(JumioModuleIOS);
+emitter.addListener(
+    'EventDocumentData',
+    (reminder) => console.log(reminder.firstName + " " + reminder.lastName)
+);
+```
+
+Use EventCardInfo instead of EventDocumentData for BAM results.
+Instead of *console.log* put your own code.
