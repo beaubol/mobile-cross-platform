@@ -30,3 +30,8 @@ import {
 const { JumioModuleIOS } = NativeModules;
 ```
 
+3. Initialize the SDK when you need them.
+```javascript
+JumioModuleIOS.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+```
