@@ -35,3 +35,11 @@ const { JumioModuleIOS } = NativeModules;
 JumioModuleIOS.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 ```
+
+**If BAM Credit Card + ID is ued, init both SDKs (BAM and Netverify)**
+
+4. Afterwards start the SDK with the following command..
+```javascript
+JumioModuleIOS.startBAM();
+JumioModuleIOS.startNetverify();
+```
