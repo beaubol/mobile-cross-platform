@@ -7,7 +7,7 @@ Official Jumio Mobile-SDK plugin for react-native.
 
 ## Setup iOS
 
-1. Add the Jumio Mobile SDK to your iOS-project of your react-native project. If you don't want to add the sdk manually, you can use CocoaPods.
+1. Add the Jumio Mobile SDK to your iOS-project of your react-native project. If you don't want to add the sdk manually, you can use CocoaPods. If you use CocoaPods, download the Podfile and change the target name to the target of your project. Call **pod init** afterwards.
 2. Download the module (JumioModuleIOS.h, JumioModuleIOS.m)
 3. Open the workspace of the iOS-application and add the downloaded JumioModuleIOS-files to the project.
 4. Add the "NSCameraUsageDescription"-key to your Info.plist file.
@@ -34,6 +34,8 @@ JumioModuleIOS.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModuleIOS.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 ```
+
+<DATACENTER> can either be **us** or **eu**.
 
 **If BAM Credit Card + ID is ued, init BAM and Netverify**
 
