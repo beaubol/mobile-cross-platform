@@ -1,4 +1,3 @@
-package <YOUR_PACKAGE_NAME>;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -29,7 +28,7 @@ public class JumioReactPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new JumioModuleAndroid(reactContext));
+        modules.add(new JumioModule(reactContext));
         return modules;
     }
 }

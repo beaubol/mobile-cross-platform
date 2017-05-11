@@ -1,4 +1,3 @@
-package <YOUR_PACKAGE_NAME>;
 
 import android.widget.Toast;
 import android.app.*;
@@ -31,7 +30,7 @@ import com.jumio.nv.*;
  * Created by lkoblmueller on 31/03/2017.
  */
 
-public class JumioModuleAndroid extends ReactContextBaseJavaModule implements BamCustomScanInterface {
+public class JumioModule extends ReactContextBaseJavaModule implements BamCustomScanInterface {
 
     private final static String TAG = "JumioMobileSDK";
     public static final int PERMISSION_REQUEST_CODE_BAM = 300;
@@ -49,13 +48,13 @@ public class JumioModuleAndroid extends ReactContextBaseJavaModule implements Ba
     public static BamSDK bamSDK;
     public static MultiDocumentSDK multiDocumentSDK;
 
-    public JumioModuleAndroid(ReactApplicationContext reactContext) {
+    public JumioModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     @Override
     public String getName() {
-        return "JumioModuleAndroid";
+        return "JumioModule";
     }
 
     @ReactMethod

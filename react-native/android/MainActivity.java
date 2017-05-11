@@ -1,4 +1,3 @@
-package <YOURPACKAGENAME>;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,8 +21,8 @@ import com.jumio.nv.NetverifyDocumentData;
 import com.jumio.nv.NetverifyMrzData;
 import com.jumio.nv.NetverifySDK;
 
-// add JumioModuleAndroid
-// import com.<YOURPACKAGE>.JumioModuleAndroid;
+// add JumioModule
+// import com.<YOURPACKAGE>.JumioModule;
 
 import java.util.ArrayList;
 
@@ -41,12 +40,12 @@ public class MainActivity extends ReactActivity {
         }
 
         if (allGranted) {
-            if (requestCode == JumioModuleAndroid.PERMISSION_REQUEST_CODE_BAM) {
-                startSdk(JumioModuleAndroid.bamSDK);
-            } else if (requestCode == JumioModuleAndroid.PERMISSION_REQUEST_CODE_NETVERIFY) {
-                startSdk(JumioModuleAndroid.netverifySDK);
-            } else if (requestCode == JumioModuleAndroid.PERMISSION_REQUEST_CODE_MULTI_DOCUMENT) {
-                startSdk(JumioModuleAndroid.multiDocumentSDK);
+            if (requestCode == JumioModule.PERMISSION_REQUEST_CODE_BAM) {
+                startSdk(JumioModule.bamSDK);
+            } else if (requestCode == JumioModule.PERMISSION_REQUEST_CODE_NETVERIFY) {
+                startSdk(JumioModule.netverifySDK);
+            } else if (requestCode == JumioModule.PERMISSION_REQUEST_CODE_MULTI_DOCUMENT) {
+                startSdk(JumioModule.multiDocumentSDK);
             }
         } else {
             Toast.makeText(this, "You need to grant all required permissions to start the Jumio SDK", Toast.LENGTH_LONG).show();
@@ -84,9 +83,9 @@ public class MainActivity extends ReactActivity {
 
             //At this point, the SDK is not needed anymore. It is highly advisable to call destroy(), so that
             //internal resources can be freed.
-            if (JumioModuleAndroid.netverifySDK != null) {
-                JumioModuleAndroid.netverifySDK.destroy();
-                JumioModuleAndroid.netverifySDK = null;
+            if (JumioModule.netverifySDK != null) {
+                JumioModule.netverifySDK.destroy();
+                JumioModule.netverifySDK = null;
             }
 
         } else if (requestCode == BamSDK.REQUEST_CODE) {
@@ -110,9 +109,9 @@ public class MainActivity extends ReactActivity {
 
             //At this point, the SDK is not needed anymore. It is highly advisable to call destroy(), so that
             //internal resources can be freed.
-            if (JumioModuleAndroid.bamSDK != null) {
-                JumioModuleAndroid.bamSDK.destroy();
-                JumioModuleAndroid.bamSDK = null;
+            if (JumioModule.bamSDK != null) {
+                JumioModule.bamSDK.destroy();
+                JumioModule.bamSDK = null;
             }
         }
     }
