@@ -127,7 +127,7 @@ dependencies {
 Anstelle der SDK_VERSION kann ein globaler Paramter definiert werden.
 ```gradle
 ext {
-    SDK_VERSION = "2.5.0"
+    SDK_VERSION = "2.6.0"
 }
 ```
 
