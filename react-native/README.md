@@ -91,7 +91,7 @@ protected List<ReactPackage> getPackages() {
 ```
 
 6. Update the AndroidManifest file.
-    * Set **android:allowBackup** to false
+* Set **android:allowBackup** to false
 ```
 <application
     ...
@@ -100,6 +100,6 @@ protected List<ReactPackage> getPackages() {
 </application>
 ```
 
-    * Add the needed sdk activities (Add only the ones you need)
+* Add the needed sdk activities (Add only the ones you need)
 
 
