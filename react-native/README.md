@@ -101,5 +101,22 @@ protected List<ReactPackage> getPackages() {
 ```
 
 * Add the needed sdk activities (Add only the ones you need)
-
-
+```
+<activity
+    android:name="com.jumio.nv.NetverifyActivity"
+    android:windowSoftInputMode="adjustResize"
+    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+    android:hardwareAccelerated="true"
+    android:theme="@style/Theme.Netverify"/>
+<activity
+    android:name="com.jumio.bam.BamActivity"
+    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+    android:hardwareAccelerated="true"
+    android:theme="@style/Theme.Bam"/>
+<activity
+    android:name="com.jumio.md.MultiDocumentActivity"
+    android:windowSoftInputMode="adjustResize"
+    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+    android:hardwareAccelerated="true"
+    android:theme="@style/Theme.MultiDocument"/>
+```
