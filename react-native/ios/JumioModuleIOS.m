@@ -25,40 +25,17 @@ RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"EventDocumentData", @"EventCardInfo", @"EventDocumentVerification"];
-}
-
-#pragma mark - Netverify + Fastfill
-
-RCT_EXPORT_METHOD(initNetverify:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
-    NetverifyConfiguration *configuration = [NetverifyConfiguration new];
-    configuration.delegate = self;
-    configuration.merchantApiToken = apiToken;
-    configuration.merchantApiSecret = apiSecret;
-    NSString *dataCenterLowercase = [dataCenter lowercaseString];
-    configuration.dataCenter = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
-    
-    //******* optional customization *******
-    configuration.preselectedDocumentTypes = NetverifyDocumentTypeAll;
-    configuration.requireVerification = NO;
-    // ...
-    
-    _netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: configuration];
-}
-
-RCT_EXPORT_METHOD(startNetverify) {
-    if (_netverifyViewController == nil) {
-        NSLog(@"The Netverify SDK is not initialized yet. Call initNetverify() first.");
-        return;
-    }
-    
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController presentViewController: _netverifyViewController animated:YES completion: nil];
+    return @[@"EventError", @"EventDocumentData", @"EventCardInfo", @"EventDocumentVerification"];
 }
 
 #pragma mark - BAM Checkout
 
 RCT_EXPORT_METHOD(initBAM:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
+    if ([apiToken length] == 0 || [apiSecret length] == 0 || [dataCenter length] == 0) {
+        [self sendError: @"Missing required parameters apiToken, apiSecret or dataCenter"];
+        return;
+    }
+    
     NetswipeConfiguration *configuration = [NetswipeConfiguration new];
     configuration.delegate = self;
     configuration.merchantApiToken = apiToken;
@@ -84,9 +61,47 @@ RCT_EXPORT_METHOD(startBAM) {
     [delegate.window.rootViewController presentViewController: _bamViewController animated: YES completion: nil];
 }
 
+#pragma mark - Netverify + Fastfill
+
+RCT_EXPORT_METHOD(initNetverify:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
+    if ([apiToken length] == 0 || [apiSecret length] == 0 || [dataCenter length] == 0) {
+        [self sendError: @"Missing required parameters apiToken, apiSecret or dataCenter"];
+        return;
+    }
+    
+    NetverifyConfiguration *configuration = [NetverifyConfiguration new];
+    configuration.delegate = self;
+    configuration.merchantApiToken = apiToken;
+    configuration.merchantApiSecret = apiSecret;
+    NSString *dataCenterLowercase = [dataCenter lowercaseString];
+    configuration.dataCenter = ([dataCenterLowercase isEqualToString: @"eu"]) ? JumioDataCenterEU : JumioDataCenterUS;
+    
+    //******* optional customization *******
+    configuration.preselectedDocumentTypes = NetverifyDocumentTypeAll;
+    configuration.requireVerification = NO;
+    // ...
+    
+    _netverifyViewController = [[NetverifyViewController alloc] initWithConfiguration: configuration];
+}
+
+RCT_EXPORT_METHOD(startNetverify) {
+    if (_netverifyViewController == nil) {
+        NSLog(@"The Netverify SDK is not initialized yet. Call initNetverify() first.");
+        return;
+    }
+    
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController presentViewController: _netverifyViewController animated:YES completion: nil];
+}
+
 #pragma mark - Document Verification
 
 RCT_EXPORT_METHOD(initDocumentVerification:(NSString *)apiToken apiSecret:(NSString *)apiSecret dataCenter:(NSString *)dataCenter) {
+    if ([apiToken length] == 0 || [apiSecret length] == 0 || [dataCenter length] == 0) {
+        [self sendError: @"Missing required parameters apiToken, apiSecret or dataCenter"];
+        return;
+    }
+    
     MultiDocumentConfiguration *configuration = [MultiDocumentConfiguration new];
     configuration.delegate = self;
     configuration.merchantApiToken = apiToken;
@@ -117,11 +132,66 @@ RCT_EXPORT_METHOD(startDocumentVerification) {
     [delegate.window.rootViewController presentViewController: _documentVerificationViewController animated: YES completion: nil];
 }
 
+#pragma mark - BAMSDKDelegate
+
+- (void) netswipeViewController:(NetswipeViewController *)controller didFinishScanWithCardInformation:(NetswipeCardInformation *)cardInformation scanReference:(NSString *)scanReference {
+    // Build result object
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+    
+    if (cardInformation.cardType == NetswipeCreditCardTypeVisa) {
+        [result setValue: @"VISA" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeMasterCard) {
+        [result setValue: @"MASTER_CARD" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeAmericanExpress) {
+        [result setValue: @"AMERICAN_EXPRESS" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeChinaUnionPay) {
+        [result setValue: @"CHINA_UNIONPAY" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiners) {
+        [result setValue: @"DINERS_CLUB" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiscover) {
+        [result setValue: @"DISCOVER" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeJCB) {
+        [result setValue: @"JCB" forKey: @"cardType"];
+    } else if (cardInformation.cardType == NetswipeCreditCardTypeStarbucks) {
+        [result setValue: @"STARBUCKS" forKey: @"cardType"];
+    }
+    
+    [result setValue: [cardInformation.cardNumber copy] forKey: @"cardNumber"];
+    [result setValue: [cardInformation.cardNumberGrouped copy] forKey: @"cardNumberGrouped"];
+    [result setValue: [cardInformation.cardNumberMasked copy] forKey: @"cardNumberMasked"];
+    [result setValue: [cardInformation.cardExpiryMonth copy] forKey: @"cardExpiryMonth"];
+    [result setValue: [cardInformation.cardExpiryYear copy] forKey: @"cardExpiryYear"];
+    [result setValue: [cardInformation.cardExpiryDate copy] forKey: @"cardExpiryDate"];
+    [result setValue: [cardInformation.cardCVV copy] forKey: @"cardCVV"];
+    [result setValue: [cardInformation.cardHolderName copy] forKey: @"cardHolderName"];
+    [result setValue: [cardInformation.cardSortCode copy] forKey: @"cardSortCode"];
+    [result setValue: [cardInformation.cardAccountNumber copy] forKey: @"cardAccountNumber"];
+    [result setValue: [NSNumber numberWithBool: cardInformation.cardSortCodeValid] forKey: @"cardSortCodeValid"];
+    [result setValue: [NSNumber numberWithBool: cardInformation.cardAccountNumberValid] forKey: @"cardAccountNumberValid"];
+    [result setValue: cardInformation.encryptedAdyenString forKey: @"encryptedAdyenString"];
+    
+    // send data back to react native
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
+        [self sendEventWithName: @"EventCardInfo" body: result];
+    }];
+}
+
+- (void)netswipeViewController:(NetswipeViewController *)controller didCancelWithError:(NSError *)error{
+    [self sendError: [self getErrorMessage: error]];
+}
+
+- (void)netswipeViewController:(NetswipeViewController *)controller didStartScanAttemptWithRequestReference:(NSString *)requestReference{
+    NSLog(@"NetswipeViewController did start scan attempt with request reference: %@", requestReference);
+}
+
+- (void)netswipeViewController:(NetswipeViewController *)controller didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
+    [self sendError: [self getErrorMessage: error]];
+}
+
 #pragma mark - NetverifySDKDelegate
 
 - (void) netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishWithDocumentData:(NetverifyDocumentData *)documentData scanReference:(NSString *)scanReference {
-    NSLog(@"NetverifySDK finished successfully with scan reference: %@", scanReference);
-    
     // Build Result Object
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -208,104 +278,18 @@ RCT_EXPORT_METHOD(startDocumentVerification) {
 }
 
 - (void) netverifyViewController:(NetverifyViewController *)netverifyViewController didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
-    NSLog(@"NetverifySDK cancelled with error: %@, scanReference: %@", error.localizedDescription, scanReference);
-    
-    // send error event
-    [self sendError: error];
-    
-    // dismiss
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self sendError: [self getErrorMessage: error]];
 }
 
 - (void) netverifyViewController:(NetverifyViewController *)netverifyViewController didFinishInitializingWithError:(NSError *)error {
     if (error != nil) {
-        NSLog(@"NetverifySDK initialized with error: %@", error.localizedDescription);
-        
-        // send error event
-        [self sendError: error];
+        [self sendError: [self getErrorMessage: error]];
     }
-}
-
-#pragma mark - BAMSDKDelegate
-
-- (void) netswipeViewController:(NetswipeViewController *)controller didFinishScanWithCardInformation:(NetswipeCardInformation *)cardInformation scanReference:(NSString *)scanReference {
-    NSLog(@"BAMSDK finished successfully with scan reference: %@", scanReference);
-    
-    // Build result object
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    
-    if (cardInformation.cardType == NetswipeCreditCardTypeVisa) {
-        [result setValue: @"VISA" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeMasterCard) {
-        [result setValue: @"MASTER_CARD" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeAmericanExpress) {
-        [result setValue: @"AMERICAN_EXPRESS" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeChinaUnionPay) {
-        [result setValue: @"CHINA_UNIONPAY" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiners) {
-        [result setValue: @"DINERS_CLUB" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeDiscover) {
-        [result setValue: @"DISCOVER" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeJCB) {
-        [result setValue: @"JCB" forKey: @"cardType"];
-    } else if (cardInformation.cardType == NetswipeCreditCardTypeStarbucks) {
-        [result setValue: @"STARBUCKS" forKey: @"cardType"];
-    }
-    
-    [result setValue: [cardInformation.cardNumber copy] forKey: @"cardNumber"];
-    [result setValue: [cardInformation.cardNumberGrouped copy] forKey: @"cardNumberGrouped"];
-    [result setValue: [cardInformation.cardNumberMasked copy] forKey: @"cardNumberMasked"];
-    [result setValue: [cardInformation.cardExpiryMonth copy] forKey: @"cardExpiryMonth"];
-    [result setValue: [cardInformation.cardExpiryYear copy] forKey: @"cardExpiryYear"];
-    [result setValue: [cardInformation.cardExpiryDate copy] forKey: @"cardExpiryDate"];
-    [result setValue: [cardInformation.cardCVV copy] forKey: @"cardCVV"];
-    [result setValue: [cardInformation.cardHolderName copy] forKey: @"cardHolderName"];
-    [result setValue: [cardInformation.cardSortCode copy] forKey: @"cardSortCode"];
-    [result setValue: [cardInformation.cardAccountNumber copy] forKey: @"cardAccountNumber"];
-    [result setValue: [NSNumber numberWithBool: cardInformation.cardSortCodeValid] forKey: @"cardSortCodeValid"];
-    [result setValue: [NSNumber numberWithBool: cardInformation.cardAccountNumberValid] forKey: @"cardAccountNumberValid"];
-    [result setValue: cardInformation.encryptedAdyenString forKey: @"encryptedAdyenString"];
-    
-    // send data back to react native
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
-        [self sendEventWithName: @"EventCardInfo" body: result];
-    }];
-}
-
-- (void)netswipeViewController:(NetswipeViewController *)controller didCancelWithError:(NSError *)error{
-    NSInteger code = error.code;
-    NSString *message = error.localizedDescription;
-    NSLog(@"Canceled with error code: %ld, message: %@", (long)code, message);
-    
-    // send error event
-    [self sendError: error];
-    
-    // dismiss
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: nil];
-}
-
-- (void)netswipeViewController:(NetswipeViewController *)controller didStartScanAttemptWithRequestReference:(NSString *)requestReference{
-    NSLog(@"NetswipeViewController did start scan attempt with request reference: %@", requestReference);
-}
-
-- (void)netswipeViewController:(NetswipeViewController *)controller didCancelWithError:(NSError *)error scanReference:(NSString *)scanReference {
-    NSLog(@"BAMSDK cancelled with error: %@, scanReference: %@", error.localizedDescription, scanReference);
-    
-    // send error event
-    [self sendError: error];
-    
-    // dismiss
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Document Verification Delegates
 
 - (void)multiDocumentViewController:(MultiDocumentViewController *)multiDocumentViewController didFinishWithScanReference:(NSString *)scanReference {
-    NSLog(@"Document Verification finished successfully.");
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
         [self sendEventWithName: @"EventDocumentVerification" body: @"Document Verification finished successfully."];
@@ -313,20 +297,21 @@ RCT_EXPORT_METHOD(startDocumentVerification) {
 }
 
 - (void)multiDocumentViewController:(MultiDocumentViewController *)multiDocumentViewController didFinishWithError:(NSError *)error {
-    NSLog(@"Document-Verification cancelled with error: %@", error.localizedDescription);
-    
-    // send error event
-    [self sendError: error];
-    
-    // dismiss
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [self sendError: [self getErrorMessage: error]];
 }
 
 # pragma mark - Helper Methods
 
-- (void) sendError:(NSError *)error {
-    // TODO:...
+- (void) sendError:(NSString *)error {
+    // send error event
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController dismissViewControllerAnimated: YES completion: ^{
+        [self sendEventWithName: @"EventError" body: error];
+    }];
+}
+
+- (NSString *) getErrorMessage:(NSError *)error {
+    return [NSString stringWithFormat: @"Cancelled with error code: %ld, message: %@", (long)error.code, error.localizedDescription];
 }
 
 @end
