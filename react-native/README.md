@@ -34,19 +34,23 @@ const { JumioModuleIOS } = NativeModules;
 ```javascript
 JumioModuleIOS.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+JumioModuleIOS.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 ```
 
-**If BAM Credit Card + ID is ued, init both SDKs (BAM and Netverify)**
+**If BAM Credit Card + ID is ued, init BAM and Netverify**
 
 4. Afterwards start the SDK with the following command..
 ```javascript
 JumioModuleIOS.startBAM();
 JumioModuleIOS.startNetverify();
+JumioModuleIOS.startDocumentVerification();
 ```
 
 5. Now you can listen to events to retrieve the scanned data:
     * **EventDocumentData** for Netverify results.
     * **EventCardInfo** for BAM results.
+    * **EventDocumentVerification** for Document Verification results.
+    * **EventError** for every error.
 
 6. First add **NativeEventEmitter** to the Import from 'react-native'.
 ```javascript 
