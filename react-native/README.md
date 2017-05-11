@@ -99,6 +99,8 @@ protected List<ReactPackage> getPackages() {
     ...
 </application>
 ```
+asdf
+
 
     * Add the needed sdk activities (Add only the ones you need)
 ```
