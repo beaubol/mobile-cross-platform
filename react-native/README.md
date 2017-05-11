@@ -132,3 +132,12 @@ android {
     }
 }
 ```
+
+* Set BuildToolsVersion to a minimum of 23.0.3.
+```gradle
+android {
+    ...
+    buildToolsVersion "23.0.3"
+    ...
+}
+```
