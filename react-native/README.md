@@ -8,8 +8,8 @@ Official Jumio Mobile-SDK plugin for react-native.
 ## Setup iOS
 
 1. Add the Jumio Mobile SDK to your iOS-project of your react-native project. If you don't want to add the sdk manually, you can use CocoaPods. If you use CocoaPods, download the Podfile and change the target name to the target of your project. Call **pod init** afterwards.
-2. Download the module (JumioModuleIOS.h, JumioModuleIOS.m)
-3. Open the workspace of the iOS-application and add the downloaded JumioModuleIOS-files to the project.
+2. Download the module (JumioModule.h, JumioModule.m)
+3. Open the workspace of the iOS-application and add the downloaded JumioModule-files to the project.
 4. Add the "NSCameraUsageDescription"-key to your Info.plist file.
 5. If needed: Customise your configuration.
 
@@ -25,14 +25,14 @@ import {
 
 2. Create a variable of your iOS module:
 ```javascript
-const { JumioModuleIOS } = NativeModules;
+const { JumioModule } = NativeModules;
 ```
 
 3. Initialize the SDK with the following call.
 ```javascript
-JumioModuleIOS.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
-JumioModuleIOS.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
-JumioModuleIOS.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+JumioModule.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+JumioModule.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
+JumioModule.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 ```
 
 <DATACENTER> can either be **us** or **eu**.
@@ -41,9 +41,9 @@ JumioModuleIOS.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>)
 
 4. Afterwards start the SDK with the following command.
 ```javascript
-JumioModuleIOS.startBAM();
-JumioModuleIOS.startNetverify();
-JumioModuleIOS.startDocumentVerification();
+JumioModule.startBAM();
+JumioModule.startNetverify();
+JumioModule.startDocumentVerification();
 ```
 
 5. Now you can listen to events to retrieve the scanned data:
@@ -62,7 +62,7 @@ import {
 
 7. Now listen to your events with the event emitter
 ```javascript
-const emitter = new NativeEventEmitter(JumioModuleIOS);
+const emitter = new NativeEventEmitter(JumioModule);
 emitter.addListener(
     'EventDocumentData|EventCardInfo|EventDocumentVerification|EventError',
     (reminder) => alert(JSON.stringify(reminder))
@@ -70,3 +70,5 @@ emitter.addListener(
 ```
 
 ## Setup Android
+
+1. Download the android module (JumioModuleAndroid.java, JumioReactPackage.java, MainActivity.java
