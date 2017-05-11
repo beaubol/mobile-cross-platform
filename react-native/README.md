@@ -69,5 +69,4 @@ emitter.addListener(
 );
 ```
 
-Use EventCardInfo instead of EventDocumentData for BAM results.
-Instead of *console.log* put your own code.
+### Setup Android
