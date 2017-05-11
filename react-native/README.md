@@ -136,14 +136,14 @@ ext {
 1. Add "**NativeModules**" to the import of 'react-native'.
 ```javascript
 import {
-...
-NativeModules
+    ...
+    NativeModules
 } from 'react-native';
 ```
 
 2. Create a variable of your iOS module:
 ```javascript
-const { JumioModule } = NativeModules;
+    const { JumioModule } = NativeModules;
 ```
 
 3. Initialize the SDK with the following call.
@@ -170,19 +170,32 @@ JumioModule.startDocumentVerification();
 * **EventDocumentVerification** for Document Verification results.
 * **EventError** for every error.
 
-6. First add **NativeEventEmitter** to the Import from 'react-native'.
+6. First add **NativeEventEmitter** for iOS and **DeviceEventEmitter** for android to the Import from 'react-native'.
+**iOS**
 ```javascript 
 import {
-...
+    ...
 NativeEventEmitter
 } from 'react-native';
 ```
 
+**android**
+```javascript 
+import {
+    ...
+    DeviceEventEmitter
+} from 'react-native';
+```
+
 7. Now listen to your events with the event emitter
+**iOS**
 ```javascript
 const emitter = new NativeEventEmitter(JumioModule);
 emitter.addListener(
-'EventDocumentData|EventCardInfo|EventDocumentVerification|EventError',
-(reminder) => alert(JSON.stringify(reminder))
+    'EventDocumentData|EventCardInfo|EventDocumentVerification|EventError',
+    (reminder) => alert(JSON.stringify(reminder))
 );
 ```
+
+**android**
+
