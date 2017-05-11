@@ -5,9 +5,7 @@ Official Jumio Mobile-SDK plugin for react-native.
 ## Requirements
 * Jumio Mobile SDK Android 2.6.0+, iOS 2.5.0+
 
-## Setup
-
-### Setup iOS
+## Setup iOS
 
 1. Add the Jumio Mobile SDK to your iOS-project of your react-native project. If you don't want to add the sdk manually, you can use CocoaPods.
 2. Download the module (JumioModuleIOS.h, JumioModuleIOS.m)
@@ -69,4 +67,4 @@ emitter.addListener(
 );
 ```
 
-### Setup Android
+## Setup Android
