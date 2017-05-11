@@ -92,7 +92,7 @@ protected List<ReactPackage> getPackages() {
 
 6. Update the AndroidManifest file.
 * Set **android:allowBackup** to false
-```
+```xml
 <application
     ...
     android:allowBackup="false"
@@ -101,7 +101,7 @@ protected List<ReactPackage> getPackages() {
 ```
 
 * Add the needed sdk activities (Add only the ones you need)
-```
+```xml
 <activity
     android:name="com.jumio.nv.NetverifyActivity"
     android:windowSoftInputMode="adjustResize"
@@ -119,4 +119,16 @@ protected List<ReactPackage> getPackages() {
     android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
     android:hardwareAccelerated="true"
     android:theme="@style/Theme.MultiDocument"/>
+```
+
+7. Configure the gradle script (Module: app)
+* Enable MultiDex
+```
+android {
+    ...
+    defaultConfig {
+        ...
+        multiDexEnabled true
+    }
+}
 ```
