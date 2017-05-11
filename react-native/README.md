@@ -143,7 +143,7 @@ import {
 
 2. Create a variable of your iOS module:
 ```javascript
-    const { JumioModule } = NativeModules;
+const { JumioModule } = NativeModules;
 ```
 
 3. Initialize the SDK with the following call.
@@ -153,7 +153,7 @@ JumioModule.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 JumioModule.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>);
 ```
 
-<DATACENTER> can either be **us** or **eu**.
+Datacenter can either be **us** or **eu**.
 
 **If BAM Credit Card + ID is ued, init BAM and Netverify**
 
@@ -171,11 +171,12 @@ JumioModule.startDocumentVerification();
 * **EventError** for every error.
 
 6. First add **NativeEventEmitter** for iOS and **DeviceEventEmitter** for android to the Import from 'react-native'.
+
 **iOS**
 ```javascript 
 import {
     ...
-NativeEventEmitter
+    NativeEventEmitter
 } from 'react-native';
 ```
 
@@ -187,7 +188,8 @@ import {
 } from 'react-native';
 ```
 
-7. Now listen to your events with the event emitter
+7. Now listen to your events with the event emitter.
+
 **iOS**
 ```javascript
 const emitter = new NativeEventEmitter(JumioModule);
@@ -198,4 +200,8 @@ emitter.addListener(
 ```
 
 **android**
-
+```javascript
+DeviceEventEmitter.addListener('EventDocumentData|EventCardInfo|EventDocumentVerification|EventError', function(e: Event) {
+    alert(JSON.stringify(e))
+)};
+```
