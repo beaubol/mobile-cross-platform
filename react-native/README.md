@@ -39,7 +39,7 @@ JumioModuleIOS.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>)
 
 **If BAM Credit Card + ID is ued, init BAM and Netverify**
 
-4. Afterwards start the SDK with the following command..
+4. Afterwards start the SDK with the following command.
 ```javascript
 JumioModuleIOS.startBAM();
 JumioModuleIOS.startNetverify();
