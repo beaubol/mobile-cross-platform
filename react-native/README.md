@@ -93,7 +93,6 @@ protected List<ReactPackage> getPackages() {
 6. Update the AndroidManifest file.
     * Set android:allowBackup to false
 ```
-
 <application
     ...
     android:allowBackup="false"
