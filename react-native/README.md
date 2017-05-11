@@ -123,7 +123,7 @@ protected List<ReactPackage> getPackages() {
 
 7. Configure the gradle script (Module: app)
 * Enable MultiDex
-```
+```gradle
 android {
     ...
     defaultConfig {
