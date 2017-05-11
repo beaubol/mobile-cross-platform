@@ -201,7 +201,8 @@ emitter.addListener(
 
 **android**
 ```javascript
-DeviceEventEmitter.addListener('EventDocumentData|EventCardInfo|EventDocumentVerification|EventError', function(e: Event) {
-    alert(JSON.stringify(e))
+DeviceEventEmitter.addListener('EventDocumentData|EventCardInfo|EventDocumentVerification|EventError', 
+    function(e: Event) {
+        alert(JSON.stringify(e))
 )};
 ```
