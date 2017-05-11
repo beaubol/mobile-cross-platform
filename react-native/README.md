@@ -71,4 +71,21 @@ emitter.addListener(
 
 ## Setup Android
 
-1. Download the android module (JumioModuleAndroid.java, JumioReactPackage.java, MainActivity.java
+1. Download the android module (JumioModule.java, JumioReactPackage.java, MainActivity.java)
+2. Open the android project of your react-native project and add **JumioModule.java** and **JumioReactPackage.java** to your package.
+3. Merge the downloaded **MainActivity.java** with the MainActivity of your project.
+4. Add the import of your JumioModule to your MainActivity.
+```java
+import <YOUR_PACKAGE>.JumioModule;
+```
+
+5. Add **JumioReactPackage** to the getPackages()-method of your MainApplication.
+```java
+@Override
+protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new JumioReactPackage()
+    );
+}
+```
