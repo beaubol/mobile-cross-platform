@@ -178,4 +178,13 @@ dependencies {
 
     ...
 }
-``
+```
+
+Anstelle der SDK_VERSION kann ein globaler Paramter definiert werden.
+```gradle
+ext {
+    SDK_VERSION = "2.5.0"
+}
+```
+
+Now the native part is done and we head over to the react native code.
