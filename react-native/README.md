@@ -64,7 +64,7 @@ import {
 ```javascript
 const emitter = new NativeEventEmitter(JumioModuleIOS);
 emitter.addListener(
-    'EventDocumentData',
+    'EventDocumentData|EventCardInfo|EventDocumentVerification|EventError',
     (reminder) => console.log(reminder.firstName + " " + reminder.lastName)
 );
 ```
