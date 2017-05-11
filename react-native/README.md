@@ -100,6 +100,6 @@ protected List<ReactPackage> getPackages() {
 </application>
 ```
 
-* Add the needed sdk activities (Add only the ones you need)
+    * Add the needed sdk activities (Add only the ones you need)
 
 
