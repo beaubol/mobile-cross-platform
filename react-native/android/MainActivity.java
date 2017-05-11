@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+import java.util.ArrayList;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
@@ -23,8 +24,6 @@ import com.jumio.nv.NetverifySDK;
 
 // add JumioModule
 // import com.<YOURPACKAGE>.JumioModule;
-
-import java.util.ArrayList;
 
 public class MainActivity extends ReactActivity {
 
