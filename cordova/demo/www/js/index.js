@@ -29,16 +29,16 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
 		
-		Jumio.initBAM('5fb5e560-4a5e-4555-b28a-4513ac3f8e15', 'mGf5EWittbtSOFbcNeCD0yoWizz3wGKC', 'us', {
+		Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
 			cvvRequired: false,
 			cameraPosition: "back"
 		});
-		Jumio.initNetverify('69e2685a-6669-4db9-a3d2-586674392d6c', 'HpFUf2YUQQfKQLT7LF2sIAFtP203bo9D', 'us', {
+		Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
 			requireVerification: false,
 			preselectedCountry: "AUT",
 			documentTypes: ["passPort", "DRIVER_LICENSE"]
 		});
-		Jumio.initDocumentVerification('69e2685a-6669-4db9-a3d2-586674392d6c', 'HpFUf2YUQQfKQLT7LF2sIAFtP203bo9D', 'us', {
+		Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {
 			country: "USA",
 			type: "BS",
 			customerId: "123",
