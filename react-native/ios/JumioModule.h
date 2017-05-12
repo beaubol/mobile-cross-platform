@@ -1,6 +1,6 @@
 //
-//  JumioManager.h
-//  JumioMobileSDK
+//  JumioModule.h
+//  Jumio Software Development GmbH
 //
 //  Created by Lukas Koblmüller on 29/03/2017.
 //  Copyright © 2017 Facebook. All rights reserved.
@@ -10,6 +10,6 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface JumioModuleIOS : RCTEventEmitter <RCTBridgeModule>
+@interface JumioModule : RCTEventEmitter <RCTBridgeModule>
 
 @end
