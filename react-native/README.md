@@ -131,6 +131,8 @@ ext {
 }
 ```
 
+8. If needed: Customise your configuration.
+
 ## Integration in react-native
 
 1. Add "**NativeModules**" to the import of 'react-native'.
