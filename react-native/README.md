@@ -201,6 +201,8 @@ import {
 7. Now listen to your events with the event emitter.
 
 **iOS**
+The event receives a json object with all the data.
+
 ```javascript
 const emitter = new NativeEventEmitter(JumioModule);
 emitter.addListener(
@@ -210,6 +212,8 @@ emitter.addListener(
 ```
 
 **android**
+The event receives a json string with all the data.
+
 ```javascript
 DeviceEventEmitter.addListener('EventDocumentData|EventCardInfo|EventDocumentVerification|EventError', 
     function(e: Event) {
