@@ -66,6 +66,14 @@ protected List<ReactPackage> getPackages() {
 ```
 
 7. Configure the gradle script (Module: app)
+* Make sure your compileSDKVersion is high enough. Minimum: 25.
+```gradle
+android {
+    compileSdkVersion 25
+    ...
+}
+```
+
 * Enable MultiDex
 ```gradle
 android {
