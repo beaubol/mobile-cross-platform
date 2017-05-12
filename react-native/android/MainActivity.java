@@ -9,6 +9,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -23,23 +27,9 @@ import com.jumio.nv.NetverifyDocumentData;
 import com.jumio.nv.NetverifyMrzData;
 import com.jumio.nv.NetverifySDK;
 
-import com.demo.JumioModule;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+//import <YOUR_PACKAGE>.JumioModule;
 
 public class MainActivity extends ReactActivity {
-    
-    /**
-     * Returns the name of the main component registered from JavaScript.
-     * This is used to schedule rendering of the component.
-     */
-    @Override
-    protected String getMainComponentName() {
-        return "demo";
-    }
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
