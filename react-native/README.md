@@ -213,6 +213,6 @@ emitter.addListener(
 ```javascript
 DeviceEventEmitter.addListener('EventDocumentData|EventCardInfo|EventDocumentVerification|EventError', 
     function(e: Event) {
-    alert(JSON.stringify(e))
+    alert(e)
 )};
 ```
