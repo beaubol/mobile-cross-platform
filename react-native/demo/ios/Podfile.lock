@@ -1,0 +1,14 @@
+PODS:
+  - JumioMobileSDK-FAT (2.5.0):
+    - JumioMobileSDK-FAT/JumioMobileSDK (= 2.5.0)
+  - JumioMobileSDK-FAT/JumioMobileSDK (2.5.0)
+
+DEPENDENCIES:
+  - JumioMobileSDK-FAT (= 2.5.0)
+
+SPEC CHECKSUMS:
+  JumioMobileSDK-FAT: b10aa07e8124be70bf05e5548bdb244f41b2dfbe
+
+PODFILE CHECKSUM: 485ddf2a2e59e0f93092c06bba9348c56791ab4f
+
+COCOAPODS: 1.2.0
