@@ -58,11 +58,8 @@ public class MainActivity extends ReactActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BamSDK.REQUEST_CODE) {
-            ArrayList<String> scanAttempts = data.getStringArrayListExtra(BamSDK.EXTRA_SCAN_ATTEMPTS);
-            
             if (resultCode == Activity.RESULT_OK) {
                 BamCardInformation cardInformation = data.getParcelableExtra(BamSDK.EXTRA_CARD_INFORMATION);
-                
                 JSONObject result = new JSONObject();
                 try {
                     result.put("cardType", cardInformation.getCardType());
@@ -136,7 +133,7 @@ public class MainActivity extends ReactActivity {
                     showErrorMessage("Result could not be sent. Try again.");
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                String errorMessage = data.getStringExtra(BamSDK.EXTRA_ERROR_MESSAGE);
+                String errorMessage = data.getStringExtra(NetverifySDK.EXTRA_ERROR_MESSAGE);
                 showErrorMessage(errorMessage);
             }
         } else if (requestCode == MultiDocumentSDK.REQUEST_CODE) {
@@ -166,7 +163,6 @@ public class MainActivity extends ReactActivity {
     
     private void showErrorMessage(String msg) {
         Log.e("Error", msg);
-        this.getReactInstanceManager().getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("EventError", msg);
-    }
-    
+        getReactInstanceManager().getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("EventError", msg);
+    }    
 }
