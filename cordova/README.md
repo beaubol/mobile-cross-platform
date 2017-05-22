@@ -3,25 +3,23 @@
 Official Jumio Mobile-SDK plugin for Apache Cordova
 
 ## Requirements
-* Jumio Mobile SDK Android 2.6.0+, iOS 2.5.0+
+* Jumio Mobile SDK 2.7.0 for Android and iOS
 
 ## Setup
 
 Add the plugin to your Cordova project.
 
 ```
-cordova plugin add cordova-plugin-jumio-mobilesdk
+cordova plugin add cordova-plugin-jumio-mobilesdk@2.7.0
 ```
 
 ## Integration
 
 ### iOS
 
-Nothing to do. Cocoapods handles everything.
+Manual integration or dependency management via cocoapods possible, please see [the official documentation of the Jumio Mobile SDK for iOS](https://github.com/Jumio/mobile-sdk-ios/tree/v2.7.0#basic-setup)
 
 ### Android
-
-Open the android project of your cordova project located in /platforms/android and open the **build.gradle** file. (Module: android)
 
 Add the Jumio repository:
 
@@ -35,39 +33,16 @@ Add a parameter for your SDK_VERSION into the ext-section:
 
 ```
 ext {
-    SDK_VERSION = "2.6.0"
+    SDK_VERSION = "2.7.0"
 }
 ```
 
-Add your needed dependencies:
 
-```
-dependencies {
-    compile "com.jumio.android:core:${SDK_VERSION}@aar"
-    compile "com.jumio.android:bam:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv-barcode:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv-barcode-vision:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv-mrz:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv-nfc:${SDK_VERSION}@aar"
-    compile "com.jumio.android:nv-ocr:${SDK_VERSION}@aar"
-    compile "com.jumio.android:md:${SDK_VERSION}@aar"
+Open the android project of your cordova project located in /platforms/android and insert the dependencies from the products you require to your **build.gradle** file. (Module: android)
 
-    //for core:
-    compile "com.android.support:support-v4:25.0.0"
-    compile "com.android.support:appcompat-v7:25.0.0"
-
-    //for nv:
-    compile "com.android.support:design:25.0.0"
-
-    //only for nv-nfc
-    compile "com.madgag.spongycastle:prov:1.54.0.0"
-    compile "net.sf.scuba:scuba-sc-android:0.0.10"
-
-    //only for nv-barcode-vision
-    compile "com.google.android.gms:play-services-vision:9.6.1"
-}
-```
+[Netverify & Fastfill](https://github.com/Jumio/mobile-sdk-android/blob/v2.7.0/docs/integration_netverify-fastfill.md#dependencies)
+[Netverify Multi Document](https://github.com/Jumio/mobile-sdk-android/blob/v2.7.0/docs/integration_multi-document.md#dependencies)
+[Integration BAM Checkout](https://github.com/Jumio/mobile-sdk-android/blob/v2.7.0/docs/integration_bam-checkout.md#dependencies)
 
 ## Usage
 
@@ -76,16 +51,16 @@ dependencies {
 To Initialize the SDK, perform the following call.
 
 ```javascript
-Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
+Jumio.initBAM(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
 ```
 
 DATACENTER can either be **us** or **eu**.
 
  
 
-Configure the SDK with the *options*-Object.
+Configure the SDK with the *configuration*-Object.
 
-| Option | Datatype | Description |
+| Configuration | Datatype | Description |
 | ------ | -------- | ----------- |
 | cardHolderNameRequired | Boolean | 
 | sortCodeAndAccountNumberRequired | Boolean | 
@@ -97,12 +72,11 @@ Configure the SDK with the *options*-Object.
 | vibrationEffectEnabled | Boolean |
 | enableFlashOnScanStart | Boolean |
 | cardNumberMaskingEnabled | Boolean |
-| adyenPublicKey | String | Use the following option to support the Adyen client-side-encryption.
 | offlineToken *(iOS only)* | String | In your Jumio merchant backend on the "Settings" page under "API credentials" you can find your Offline token. |
 | cameraPosition | String | Which camera is used by default. Can be **front** or **back**. |
 | cardTypes | String-Array | An array of accepted card types. Available card types: **visa**, **master_card**, **american_express**, **china_unionpay**, **diners_club**, **discover**, **jcb**, **starbucks** |
 
-Initialization example with options.
+Initialization example with configuration.
 
 ```javascript
 Jumio.initBAM("123", "456", "us", {
@@ -136,16 +110,16 @@ Jumio.startBAM(function(documentData) {
 To initialize the SDK, perform the following call.
 
 ```javascript
-Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
+Jumio.initNetverify(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
 ```
 
 DATACENTER can either be **us** or **eu**.
 
  
 
-Configure the SDK with the *options*-Object.
+Configure the SDK with the *configuration*-Object.
 
-| Option | Datatype | Description |
+| Configuration | Datatype | Description |
 | ------ | -------- | ----------- |
 | requireVerification | Boolean | Enable ID verification |
 | callbackUrl | String | Specify an URL for individual transactions |
@@ -163,7 +137,7 @@ Configure the SDK with the *options*-Object.
 | documentTypes | String-Array | An array of accepted document types: Available document types: **passport**, **driver_license**, **identity_card**, **visa** |
 
 
-Initialization example with options.
+Initialization example with configuration.
 
 ```javascript
 Jumio.initNetverify("123", "456", "us", {
@@ -197,16 +171,16 @@ Jumio.startNetverify(function(cardInformation) {
 To initialize the SDK, perform the following call.
 
 ```javascript
-Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {options});
+Jumio.initDocumentVerification(<API_TOKEN>, <API_SECRET>, <DATACENTER>, {configuration});
 ```
 
 DATACENTER can either be **us** or **eu**.
 
  
 
-Configure the SDK with the *options*-Object. **(options marked with * are mandatory)**
+Configure the SDK with the *configuration*-Object. **(configuration marked with * are mandatory)**
 
-| Option | Datatype | Description |
+| Configuration | Datatype | Description |
 | ------ | -------- | ----------- |
 | **type*** | String | See the list below |
 | **customerId*** | String | Set a customer identifier (max. 100 characters) |
@@ -249,7 +223,7 @@ Possible types:
 *  SSC (Social security card)
 *  CUSTOM (Custom document type)
 
-Initialization example with options.
+Initialization example with configuration.
 
 ```javascript
 Jumio.initDocumentVerification("123", "456", "us", {
@@ -282,6 +256,47 @@ Jumio.startDocumentVerification(function(documentData) {
 
 JSONObject with all the extracted data.
 
+### Netverify + Fastfill
+
+| Parameter | Type | Max. length | Description  |
+|:-------------------|:----------- 	|:-------------|:-----------------|
+| selectedCountry | String| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
+| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
+| idNumber | String | 100 | Identification number of the document |
+| personalNumber | String | 14| Personal number of the document|
+| issuingDate | Date | | Date of issue |
+| expiryDate | Date | | Date of expiry |
+| issuingCountry | String | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
+| lastName | String | 100 | Last name of the customer|
+| firstName | String | 100 | First name of the customer|
+| middleName | String | 100 | Middle name of the customer |
+| dob | Date | | Date of birth |
+| gender | String | 1| m or f |
+| originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)) country code |
+| addressLine | String | 64 | Street name	|
+| city | String | 64 | City |
+| subdivision | String | 3 | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	|
+| postCode | String | 15 | Postal code |
+| mrzData |  MRZ-DATA | | MRZ data, see table below |
+| optionalData1 | String | 50 | Optional field of MRZ line 1 |
+| optionalData2 | String | 50 | Optional field of MRZ line 2 |
+| placeOfBirth | String | 255 | Place of Birth |
+| extractionMethod | String | 12| MRZ, OCR, BARCODE, BARCODE_OCR or NONE |
+
+*MRZ-Data*
+
+| Parameter |Type | Max. length | Description |
+|:---------------|:------------- |:-------------|:-----------------|
+| format | String |  8| MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
+| line1 | String | 50 | MRZ line 1 |
+| line2 | String | 50 | MRZ line 2 |
+| line3 | String | 50| MRZ line 3 |
+| idNumberValid | BOOL| | True if ID number check digit is valid, otherwise false |
+| dobValid | BOOL | | True if date of birth check digit is valid, otherwise false |
+| expiryDateValid |	BOOL| |	True if date of expiry check digit is valid or not available, otherwise false|
+| personalNumberValid | BOOL | | True if personal number check digit is valid or not available, otherwise false |
+| compositeValid | BOOL | | True if composite check digit is valid, otherwise false |
+
 ### BAM Checkout
 
 |Parameter | Type | Max. length | Description |
@@ -299,52 +314,10 @@ JSONObject with all the extracted data.
 | cardAccountNumber | String | 8 | Account number if enabled, available and readable |
 | cardSortCodeValid | BOOL |  | True if sort code valid, otherwise false |
 | cardAccountNumberValid | BOOL |  | True if account number code valid, otherwise false |
-| encryptedAdyenString | String |  | Encrypted ADYEN string |
-
-### Netverify + Fastfill
-
-| Parameter | Type | Max. length | Description  |
-|:-------------------|:----------- 	|:-------------|:-----------------|
-| selectedCountry | String| 3| [ISO 3166-1 alpha-3](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code as provided or selected |
-| selectedDocumentType | String | 16| PASSPORT, DRIVER_LICENSE, IDENTITY_CARD or VISA |
-| idNumber | String | 100 | Identification number of the document |
-| personalNumber | String | 14| Personal number of the document|
-| issuingDate | Date | | Date of issue |
-| expiryDate | Date | | Date of expiry |
-| issuingCountry | String | 3 | Country of issue as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code |
-| lastName | String | 100 | Last name of the customer|
-| firstName | String | 100 | First name of the customer|
-| middleName | String | 100 | Middle name of the customer |
-| dob | Date | | Date of birth |
-| gender | String | 1| m or f |
-| originatingCountry | String | 3|Country of origin as ([ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code |
-| addressLine | String | 64 | Street name	|
-| city | String | 64 | City |
-| subdivision | String | 3 | Last three characters of [ISO 3166-2:US](http://en.wikipedia.org/wiki/ISO_3166-2:US) state code	|
-| postCode | String | 15 | Postal code |
-| mrzData |  MRZ-DATA | | MRZ data, see table below |
-| optionalData1 | String | 50 | Optional field of MRZ line 1 |
-| optionalData2 | String | 50 | Optional field of MRZ line 2 |
-| placeOfBirth | String | 255 | Place of Birth |
-| extractionMethod | String | 12| MRT, OCR, BARCODE, BARCODE_OCR or NONE |
-
-MRZ-Data
-
-| Parameter |Type | Max. length | Description |
-|:---------------|:------------- |:-------------|:-----------------|
-| format | String |  8| MRP, TD1, TD2, CNIS, MRVA, MRVB or UNKNOWN |
-| line1 | String | 50 | MRZ line 1 |
-| line2 | String | 50 | MRZ line 2 |
-| line3 | String | 50| MRZ line 3 |
-| idNumberValid | BOOL| | True if ID number check digit is valid, otherwise false |
-| dobValid | BOOL | | True if date of birth check digit is valid, otherwise false |
-| expiryDateValid |	BOOL| |	True if date of expiry check digit is valid or not available, otherwise false|
-| personalNumberValid | BOOL | | True if personal number check digit is valid or not available, otherwise false |
-| compositeValid | BOOL | | True if composite check digit is valid, otherwise false |
 
 ### Document Verification
 
-All the extracted data of the document.
+No data returned.
 
 # Copyright
 

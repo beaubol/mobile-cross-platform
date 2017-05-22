@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-jumio-mobilesdk",
-  "version": "1.6.1",
+  "version": "2.5.0",
   "description": "Jumio Mobile SDK Plugin for Cordova",
   "cordova": {
     "id": "cordova-plugin-jumio-mobilesdk",
@@ -18,6 +18,6 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "author": "Jumio Software Development GmbH",
+  "author": "Jumio Corporation",
   "license": "ISC"
 }
