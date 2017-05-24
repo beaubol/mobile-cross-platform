@@ -7,10 +7,13 @@ Official Jumio Mobile-SDK plugin for Apache Cordova
 
 ## Setup
 
-Add the plugin to your Cordova project.
-
+Create Cordova project and add our plugin
 ```
-cordova plugin add cordova-plugin-jumio-mobilesdk@2.7.0
+cordova create MyProject com.my.project "MyProject"
+cd MyProject
+cordova platform add ios
+cordova platform add android
+cordova plugin add https://github.com/Jumio/mobile-cross-platform.git#v2.7.0:/cordova
 ```
 
 ## Integration
