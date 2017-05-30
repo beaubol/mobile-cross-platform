@@ -16,7 +16,7 @@
         <header-file src="src/ios/JumioMobileSDK.h" />
         <source-file src="src/ios/JumioMobileSDK.m" />
         
-        <preference name="CAMERA_USAGE_DESCRIPTION" default="Jumio-MobileSDK needs to access the camera to scan documents."/>
+        <preference name="CAMERA_USAGE_DESCRIPTION" default="This will allow ${PRODUCT_NAME} to take photos of your credentials."/>
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
             <string>$CAMERA_USAGE_DESCRIPTION</string>
         </config-file>

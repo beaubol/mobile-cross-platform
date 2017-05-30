@@ -2,8 +2,8 @@
 
 Official Jumio Mobile-SDK plugin for Apache Cordova
 
-## Requirements
-* Jumio Mobile SDK 2.7.0 for Android and iOS
+## Compatibility
+With every release, we ensure compatibility with the latest version of Cordova.
 
 ## Setup
 
@@ -13,7 +13,7 @@ cordova create MyProject com.my.project "MyProject"
 cd MyProject
 cordova platform add ios
 cordova platform add android
-cordova plugin add https://github.com/Jumio/mobile-cross-platform.git#v2.7.0:/cordova
+cordova plugin add https://github.com/Jumio/mobile-cross-platform.git#v2.7.0
 ```
 
 ## Integration
